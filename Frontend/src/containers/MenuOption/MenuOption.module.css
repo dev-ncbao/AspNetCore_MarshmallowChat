@@ -1,0 +1,46 @@
+.container {
+    min-width: 300px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 2px var(--gray-6);
+}
+
+.wrapper {
+    margin: 0 8px;
+    padding: 8px 0;
+}
+
+.wrapper ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.optionInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.optionContainer {
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+.optionContainer:hover {
+    background-color: var(--gray-6);
+    cursor: pointer;
+}
+
+.optionName {
+    color: var(--text-dark-2);
+}
+
+.optionDescription {
+    color: var(--gray-1);
+}

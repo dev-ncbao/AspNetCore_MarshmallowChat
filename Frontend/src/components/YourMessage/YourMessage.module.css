@@ -1,0 +1,20 @@
+.messageContent {
+  padding: 7px 14px;
+  border-radius: 20px;
+  background-color: var(--gray-5);
+  width: fit-content;
+}
+
+.yourMessageContent {
+  background-color: var(--primary-1);
+  color: #fff;
+  max-width: 70%;
+}
+
+.yourMessage {
+  justify-content: flex-end;
+}
+
+.messageWrapper {
+  flex: 1 1 auto;
+}

@@ -1,0 +1,12 @@
+.container {
+    background-color: var(--gray-5);
+    position: fixed;
+    inset: 0;
+    color: var(--text-dark-2);
+}
+
+.buttonContainer{
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}

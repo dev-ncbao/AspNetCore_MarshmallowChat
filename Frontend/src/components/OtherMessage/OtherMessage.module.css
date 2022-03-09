@@ -1,0 +1,17 @@
+.messageWrapper {
+  flex: 1 1 auto;
+}
+
+.messageContent {
+  padding: 7px 14px;
+  border-radius: 20px;
+  background-color: var(--gray-5);
+  width: fit-content;
+}
+
+.senderName {
+  width: fit-content;
+  color: var(--gray-2);
+  margin-left: 10px;
+  margin-bottom: 2px;
+}

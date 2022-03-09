@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  min-height: 68px;
+  border-bottom: 2px solid var(--gray-5);
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.headerWrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+}
+
+.logoContainer {
+  margin-left: 20px;
+  flex: 1 1 calc(100% / 3);
+}
+
+.logoWrapper {
+  gap: 10px;
+  height: 100%;
+  width: fit-content;
+}
+
+.navigationContainer {
+  margin: auto;
+  height: 100%;
+  justify-content: center;
+  flex: 1 1 calc(100% / 3);
+}
+
+.menuContainer {
+  margin-right: 20px;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 1 1 calc(100% / 3);
+}
+
+.menuItemContainer {
+  position: relative;
+}
+
+/* Main menu */
+.mainMenuContainer {
+  position: absolute;
+  right: 0;
+  padding-top: 10px;
+}

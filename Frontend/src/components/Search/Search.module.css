@@ -1,0 +1,29 @@
+.container {
+    height: 42px;
+    border-radius: 40px;
+    background-color: var(--gray-6);
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    color: var(--gray-2);
+}
+
+.iconContainer {
+    padding: 0 8px 0 16px;
+    height: 100%;
+    border-radius: inherit;
+}
+
+.input {
+    background-color: inherit;
+    color: var(--text-dark-2);
+    box-sizing: border-box;
+    padding-right: 16px;
+    width: 100%;
+}
+
+.input::placeholder {
+    color: var(--gray-2);
+}

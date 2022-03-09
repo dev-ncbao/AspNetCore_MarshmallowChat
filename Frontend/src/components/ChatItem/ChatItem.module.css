@@ -1,0 +1,51 @@
+.container {
+    border-radius: 10px;
+    width: 96%;
+    margin: 0 auto;
+}
+
+.active, .container:hover {
+    background-color: var(--gray-6);
+}
+
+.wrapper {
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+
+.infoContainer {
+    flex: 1 1 auto;
+    margin: auto 0 auto 10px;
+}
+
+.avatar {
+    width: 58px;
+    height: 58px;
+    background: var(--gradient-2);
+    border-radius: 50%;
+}
+
+.infoTopContainer, .infoBottomContainer {
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.infoTopContainer {
+    margin-bottom: -2px;
+}
+
+.infoBottomContainer {
+    margin-top: -2px;
+}
+
+.name {
+    color: var(--text-dark-3)
+}
+
+.sentTime {
+    color: var(--gray-2)
+}
+
+.lastMessage {
+    color: var(--gray-2)
+}

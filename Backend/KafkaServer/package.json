@@ -1,0 +1,19 @@
+{
+  "name": "kafkaserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "dev-ncb",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "kafkajs": "^1.16.0",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1"
+  }
+}

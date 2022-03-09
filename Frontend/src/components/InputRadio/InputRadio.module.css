@@ -1,0 +1,26 @@
+.labelContainer {
+  margin-bottom: 8px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.input {
+  display: none;
+}
+
+.labelForInput {
+    width: 58px;
+    height: 42px;
+    background: var(--gray-6);
+    border-radius: 10px;
+    color: var(--gray-1);
+}
+
+.input:checked + .labelForInput {
+    background: var(--gradient-1);
+    color: #fff;
+}
+
+.radioContainer {
+    gap: 12px;
+}

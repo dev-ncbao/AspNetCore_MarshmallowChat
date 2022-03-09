@@ -1,0 +1,7 @@
+.container {
+    height: 42px;
+    width: 410px;
+    border-radius: 40px;
+    background: var(--gradient-1);
+    color: var(--text-light-1);
+}

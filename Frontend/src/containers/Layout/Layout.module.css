@@ -1,0 +1,9 @@
+.container {
+  flex: 1 1 auto;
+  height: 100%;
+}
+
+.wrapper {
+  width: var(--max-width);
+  height: 100%;
+}
