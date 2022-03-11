@@ -190,7 +190,7 @@ namespace ApiServer.Models
             {
                 entity.HasKey(e => e.RoomId);
 
-                entity.ToTable("Room_Info");
+                entity.ToTable("RoomInfo");
 
                 entity.Property(e => e.RoomId).ValueGeneratedNever();
 
@@ -210,7 +210,7 @@ namespace ApiServer.Models
             {
                 entity.HasKey(e => new { e.RoomId, e.UserId });
 
-                entity.ToTable("Room_Member");
+                entity.ToTable("RoomMember");
 
                 entity.HasIndex(e => e.UserId, "IX_Room_Member_UserId");
 
