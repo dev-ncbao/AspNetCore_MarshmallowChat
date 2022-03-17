@@ -257,6 +257,10 @@ namespace ApiServer.Models
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(10);
 
+                entity.HasIndex(e => e.Username).IsUnique();
+
+                entity.HasIndex(e => e.Email).IsUnique();
+
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(20);
