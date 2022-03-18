@@ -4,42 +4,35 @@ using JsonDocument = System.Text.Json.JsonDocument;
 using ApiServer.Utils;
 using System.Threading.Tasks;
 using ApiServer.Models;
-using System.Linq;
-using System;
-using Microsoft.AspNetCore.Http;
 using ApiServer.Repositories;
 using ApiServer.Services;
 using Microsoft.AspNetCore.Authorization;
 
-namespace ApiServer {
+namespace ApiServer
+{
     [ApiController]
-    [Route("[controller]")]
-    public class LoginController : ControllerBase {
+    [Route("api/login")]
+    [AllowAnonymous]
+    public class LoginController : ControllerBase
+    {
         private readonly ILogger<LoginController> _logger;
+
         public LoginController(ILogger<LoginController> logger){
             _logger = logger;
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Post(JsonDocument jd){
-            string payload = jd.RootElement.GetRawText();
-            User user = await JsonUtils<User>.DeserializeAsync(payload);
-            //
-            User userFound = UserRepository.Get(user.Username, user.Password);
-            if (userFound != null)
+            string upload = jd.RootElement.GetRawText();
+            User user = await JsonUtil<User>.DeserializeAsync(upload);
+            user = await UserRepository.Select(user.Username, user.Password);
+            if (user == null)
+                return NotFound();
+            else
             {
-                string responseData = await JsonUtils<object>.SerializeAsync(new { token = TokenService.CreateToken(userFound) });
-                return Ok(responseData);
+                string payload = await JsonUtil<dynamic>.SerializeAsync(new { token = TokenService.CreateToken(user) });
+                return Ok(payload);
             }
-            else return NotFound();
-        }
-
-        [HttpGet]
-        [Authorize]
-        public string Get()
-        {
-            return "hi";
         }
     }
 }

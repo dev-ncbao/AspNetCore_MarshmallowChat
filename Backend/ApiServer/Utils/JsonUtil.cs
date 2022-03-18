@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.IO;
 namespace ApiServer.Utils
 {
-    public class JsonUtils<T>
+    public class JsonUtil<T>
     {
         public static string Serialize(T t)
         {

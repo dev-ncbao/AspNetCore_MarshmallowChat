@@ -18,11 +18,14 @@ namespace ApiServer.Services
         {   
             byte[] key = Encoding.UTF8.GetBytes(Setting.Secret);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor();
-            tokenDescriptor.Expires = DateTime.UtcNow.AddHours(EXPIRES_HOURS);
-            tokenDescriptor.SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
-            Dictionary<string, object> claims = new Dictionary<string, object>();
-            claims.Add(ClaimTypes.NameIdentifier, user.UserId);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor() {
+                Expires = DateTime.UtcNow.AddHours(EXPIRES_HOURS),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Claims = new Dictionary<string, object>()
+                {
+                    { ClaimTypes.NameIdentifier, user.UserId}
+                }
+            };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
