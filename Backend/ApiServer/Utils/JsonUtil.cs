@@ -6,14 +6,14 @@ using System.Text.Json;
 using System.IO;
 namespace ApiServer.Utils
 {
-    public class JsonUtil<T>
+    public class JsonUtil
     {
-        public static string Serialize(T t)
+        public static string Serialize<T>(T t)
         {
             return JsonSerializer.Serialize(t);
         }
 
-        public static async Task<string> SerializeAsync(T t)
+        public static async Task<string> SerializeAsync<T>(T t)
         {
             Task<string> task = new Task<string>(
                 () => JsonSerializer.Serialize(t)
@@ -23,12 +23,12 @@ namespace ApiServer.Utils
             return result;
         }
 
-        public static T Deserialize(string data)
+        public static T Deserialize<T>(string data)
         {
             return JsonSerializer.Deserialize<T>(data);
         }
 
-        public static async Task<T> DeserializeAsync(string data)
+        public static async Task<T> DeserializeAsync<T>(string data)
         {
             Task<T> task = new Task<T>(
                 () => JsonSerializer.Deserialize<T>(data)

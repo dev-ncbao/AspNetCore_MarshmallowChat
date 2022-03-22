@@ -41,8 +41,7 @@ namespace ApiServer.Models
                     LastName = "Bảo",
                     Gender = "Nam",
                     Username = "Nguyenbao1403",
-                    Password = "14032017",
-                    PhoneNumber = null,
+                    Password = "14032017"
                 },
                 new User(){
                     Avatar = null,
@@ -53,8 +52,7 @@ namespace ApiServer.Models
                     LastName = "Bảo Hi",
                     Gender = "Nam",
                     Username = "Nguyenbao2017",
-                    Password = "14032017",
-                    PhoneNumber = null,
+                    Password = "14032017"
                 }
             };
                 lstUser.ForEach(user =>
@@ -254,8 +252,6 @@ namespace ApiServer.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(64);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(10);
 
                 entity.HasIndex(e => e.Username).IsUnique();
 

@@ -22,7 +22,6 @@ namespace ApiServer
 {
     public class Startup
     {
-        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         private IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
@@ -33,13 +32,19 @@ namespace ApiServer
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins, configure =>
+                options.AddPolicy(Setting.MyAllowSpecificOrigins, configure =>
                 {
-                    configure.WithOrigins("http://localhost:3000");
+                    configure.WithOrigins("http://localhost:3000", "https://localhost:3000");
                     configure.AllowAnyMethod();
                     configure.WithHeaders(
                         HeaderNames.ContentType,
-                        HeaderNames.Accept
+                        HeaderNames.Accept,
+                        "credentials",
+                        HeaderNames.AccessControlAllowOrigin,
+                        "access-control-allow-origin",
+                        "access-control-allow-credentials",
+                        HeaderNames.AccessControlAllowCredentials,
+                        "mode"
                     );
                 });
             });
@@ -84,7 +89,7 @@ namespace ApiServer
 
             app.UseRouting();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(Setting.MyAllowSpecificOrigins);
 
             app.UseAuthentication();
 

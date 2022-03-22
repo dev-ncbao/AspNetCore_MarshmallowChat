@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
@@ -31,7 +32,7 @@ namespace ApiServer.Controllers
             else
             {
                 user.Password = "";
-                string payload = await JsonUtil<User>.SerializeAsync(user);
+                string payload = await JsonUtil.SerializeAsync<User>(user);
                 return Ok(payload);
             }
         }
@@ -40,13 +41,44 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> GetAllUser()
         {
             IEnumerable<User> users = await UserRepository.SelectAll();
-            if(users == null)
+            if (users == null)
                 return NotFound();
             else
             {
-                string payload = await JsonUtil<IEnumerable<User>>.SerializeAsync(users);
+                string payload = await JsonUtil.SerializeAsync<IEnumerable<User>>(users);
                 return Ok(payload);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(JsonDocument jd)
+        {
+            string upload = jd.RootElement.GetRawText();
+            User user = await JsonUtil.DeserializeAsync<User>(upload);
+            user.DateCreated = DateTime.UtcNow.ToLocalTime();
+            if (TryValidateModel(user))
+            {
+                if (await UserRepository.UsernameWasExisted(user.Username))
+                {
+                    return Conflict(await JsonUtil.SerializeAsync<object>(new { 
+                        message = "Tên người dùng đã được sử dụng" 
+                    }));
+                }
+                if (await UserRepository.EmailWasExisted(user.Email))
+                    return Conflict(await JsonUtil.SerializeAsync<object>(new {
+                        message = "Email đã được sử dụng" 
+                    }));
+                user = await UserRepository.Insert(user);
+                if (user != null)
+                {
+                    string payload = await JsonUtil.SerializeAsync<User>(user);
+                    return CreatedAtRoute("", user.UserId, payload);
+                }
+                else return StatusCode(500, await JsonUtil.SerializeAsync<object>(new { 
+                    message = "Lỗi máy chủ"
+                }));
+            }
+            else return BadRequest();
         }
     }
 }
