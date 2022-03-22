@@ -35,6 +35,10 @@ body {
   padding: 0;
 }
 
+#root {
+  overflow: hidden;
+}
+
 /* ::selection {
   background: var(--primary-1);
   color: #fff;
@@ -60,6 +64,12 @@ body {
 
 input {
   font-family: var(--font-family);
+}
+
+.text-body-5 {
+  font-size: 0.875rem;
+  line-height: 0.5625rem;
+  font-weight: 500;
 }
 
 .text-body-4 {

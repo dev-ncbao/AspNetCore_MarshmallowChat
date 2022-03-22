@@ -27,3 +27,9 @@
     color: var(--gray-2);
     opacity: 1;
 }
+
+.helperText {
+    white-space: pre-line;
+    padding-top: 8px;
+    color: var(--danger-2)
+}

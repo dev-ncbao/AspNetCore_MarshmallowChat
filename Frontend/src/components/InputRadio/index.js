@@ -2,13 +2,7 @@ import clsx from "clsx";
 import { useState } from "react";
 //
 import styles from './InputRadio.module.css';
-function InputRadio({ name, label, values = [] }) {
-    const [check, setCheck] = useState('Nam');
-
-    const handleChange = (e) => {
-        setCheck(e.target.value);
-    }
-
+function InputRadio({ name, label, sources = [], onChange, value }) {
     return (
         <>
             <div className={clsx(styles.labelContainer, 'd-flex')}>
@@ -16,12 +10,19 @@ function InputRadio({ name, label, values = [] }) {
             </div>
             <div className={clsx('d-flex', styles.radioContainer)}>
                 {
-                    values.map((value, index) => {
+                    sources.map((source, index) => {
                         return (
-                            <div key={value}>
-                                <input key={value} id={value + index} className={styles.input} type='radio' name={name} onChange={handleChange} value={value} checked={value === check} />
-                                <label htmlFor={value + index} className={clsx(styles.labelForInput, 'd-flex', 'justify-center', 'align-center', 'text-body-2', 'cursor-pointer', 'user-select-none')}>
-                                    {value}
+                            <div key={source}>
+                                <input
+                                    key={source}
+                                    id={source + index}
+                                    className={styles.input}
+                                    type='radio' name={name}
+                                    onChange={onChange || undefined}
+                                    value={source}
+                                    checked={source === value} />
+                                <label htmlFor={source + index} className={clsx(styles.labelForInput, 'd-flex', 'justify-center', 'align-center', 'text-body-2', 'cursor-pointer', 'user-select-none')}>
+                                    {source}
                                 </label>
                             </div>
                         )

@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { Chat, Contact, Home, Login, ResetPassword, Register } from './../pages';
 import './style.css';
 
-const socket = io('localhost:3443');
+//const socket = io('localhost:3443');
 
 function Container() {
 	return (

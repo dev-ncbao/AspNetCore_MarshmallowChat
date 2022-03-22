@@ -96,7 +96,7 @@ function Chat() {
         },
         {
             own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
+            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau, Bạn có khỏe không, lâu rồi mình không gặp nhau, Bạn có khỏe không, lâu rồi mình không gặp nhau'
         },
         {
             own: 'other',

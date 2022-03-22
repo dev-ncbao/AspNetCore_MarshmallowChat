@@ -1,8 +1,8 @@
 import styles from './CardLarge.module.css';
 
-function CardForm({children}){
+function CardForm({children, style}){
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={style}>
             {children}
         </div>
     )

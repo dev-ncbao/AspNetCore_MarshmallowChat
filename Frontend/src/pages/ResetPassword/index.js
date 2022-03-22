@@ -50,7 +50,7 @@ function ResetPassword() {
                     <div className={clsx('d-flex', styles.buttonContainer, 'align-center')}>
                         <ButtonRoundedLarge onClick={handleButtonClick} content={reseted ? 'Trở về Đăng nhập' : 'Gửi yêu cầu'} />
                         {!reseted && <span>
-                            Quay lại trang
+                            {'Quay lại trang '}
                             <Link to='/login' className={clsx('user-select-none', 'clear-a-tag', 'link-color', 'text-body-1')}>
                                 Đăng nhập
                             </Link>

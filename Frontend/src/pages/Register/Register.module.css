@@ -1,16 +1,32 @@
 .container {
-    background-color: var(--gray-5);
-    position: fixed;
-    inset: 0;
-    color: var(--text-dark-2);
+  background-color: var(--gray-5);
+  position: fixed;
+  inset: 0;
+  color: var(--text-dark-2);
+  overflow-y: scroll;
 }
 
-.inputFlexGap{
-    gap: 16px;
+.inputFlexGap {
+  gap: 16px;
 }
 
-.buttonContainer{
-    flex-direction: column;
-    margin-top: 10px;
-    gap: 12px;
+.buttonContainer {
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.validationMessage {
+  align-self: flex-start;
+  width: 100%;
+}
+
+.validationMessage ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.validationMessage ul li {
+  color: var(--danger-2);
 }

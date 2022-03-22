@@ -10,3 +10,20 @@
     gap: 12px;
     margin-top: 4px;
 }
+
+
+.validationMessage {
+    align-self: flex-start;
+    width: 100%;
+  }
+  
+  .validationMessage ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .validationMessage ul li {
+    color: var(--danger-2);
+  }
+  

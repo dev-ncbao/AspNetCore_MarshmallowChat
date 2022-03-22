@@ -8,8 +8,10 @@ function Home() {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === '/')
-            navigate('chat');
+        // if(document.cookie.includes('UserId'))
+        //     navigate('chat');
+        // else
+        //     navigate('login');
     }, [location]);
     return (
         <AppContainer>
