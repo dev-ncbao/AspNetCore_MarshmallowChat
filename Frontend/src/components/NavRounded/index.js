@@ -1,12 +1,8 @@
-import { useState } from 'react';
-//
 import styles from './NavRounded.module.css';
 
-function NavRounded({ items = [], children }) {
-    const [checked, setChecked] = useState(0);
-
+function NavRounded({ items = [], checked, dispatch, action }) {
     const handleItemClick = (index) => {
-        setChecked(index);
+        dispatch(action({ checked: index }));
     }
 
     return (
@@ -18,7 +14,6 @@ function NavRounded({ items = [], children }) {
                     )
                 })}
             </ul>
-            {children}
         </>
     )
 }

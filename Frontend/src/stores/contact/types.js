@@ -1,0 +1,2 @@
+export const SET_NAV_CHECKED = 'SET_NAV_CHECKED';
+export const SET_MENU_CHECKED = 'SET_MENU_CHECKED';
