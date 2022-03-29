@@ -4,7 +4,7 @@ import { faArrowRightFromBracket, faBell, faChevronDown, faCircleInfo, faFaceSmi
 import { useState } from "react";
 //
 import { Layout, LayoutLeft, LayoutCenter, LayoutRight } from "../../containers";
-import { Search, ChatItem, OtherMessage, YourMessage, ChatSettingItem } from './../../components';
+import { Search, ChatItem, OtherMessage, YourMessage, ChatSettingItem, NavRounded } from './../../components';
 import styles from './Chat.module.css';
 import { faImages } from "@fortawesome/free-regular-svg-icons";
 
@@ -245,13 +245,11 @@ function Chat() {
                             itemName={'Tập tin và liên kết'}
                             icon={faChevronDown}
                         >
-                             <div className={clsx(styles.subItemWrapper, 'd-flex', 'align-center', 'cursor-pointer', 'flex-col')}>
+                             <div className={clsx(styles.subItemWrapper, styles.fileAndLinkWrapper, 'd-flex', 'align-center', 'cursor-pointer', 'flex-col')}>
                                 <div className={styles.subNavContainer}>
-                                    <ul>
-                                        <li>File phương tiện</li>
-                                        <li>File</li>
-                                        <li>Liên kết</li>
-                                    </ul>
+                                    <NavRounded
+                                        items={['File phương tiện', 'File', 'Liên kết']}
+                                    />
                                 </div>
                                 <div className={styles.pictureContainer}>
                                     <div></div>

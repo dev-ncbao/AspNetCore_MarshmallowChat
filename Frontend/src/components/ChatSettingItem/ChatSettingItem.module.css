@@ -6,24 +6,13 @@
 .itemWrapper {
     height: 50px;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 12px;
 }
 
-.subItemWrapper {
-    height: 50px;
-    padding-left: 30px;
-    gap: 10px;
-}
-
-.itemWrapper:hover, .subItemWrapper:hover {
+.itemWrapper:hover {
     background-color: var(--gray-6);
 }
 
 .itemName, .icon {
     color: var(--text-dark-2);
-}
-
-.subSettingIcon {
-    width: 18px;
-    height: 18px;
 }

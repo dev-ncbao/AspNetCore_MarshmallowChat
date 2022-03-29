@@ -71,11 +71,11 @@ function Register() {
                 const response = await register.post(JSON.stringify(user));
                 if (response.status === api.STATUS_CODE.CONFLICT
                     || response.status === api.STATUS_CODE.INTERNAL_SERVER_ERROR) {
-                        response.clone().json().then(data => {
-                            let validColumns = { ...validations };
-                            validColumns.ServerResponse = { message: data.message };
-                            setValidations(validColumns);
-                        });
+                    response.clone().json().then(data => {
+                        let validColumns = { ...validations };
+                        validColumns.ServerResponse = { message: data.message };
+                        setValidations(validColumns);
+                    });
                 }
                 else if (response.status === api.STATUS_CODE.CREATED) {
                     setRegistered(true);
@@ -94,7 +94,7 @@ function Register() {
     return (
         <AppContainer>
             <div className={styles.container}>
-                <CardLarge style={registered ? {} : { top: '0', transform: 'translateX(-50%)' }}>
+                <CardLarge>
                     <label className={'text-headline-1'}>Đăng ký tài khoản</label>
                     {registered ?
                         <div>
@@ -156,8 +156,7 @@ function Register() {
                                 <InputLarge
                                     input={{ onChange: handleChange, name: 'Password', type: 'password', value: account.Password }}
                                     label='Mật khẩu'
-                                    helperText={`Độ dài 8 - 20 kí tự
-                                            ${'\n'}Phải bao gồm: Chữ in hoa, chữ thường, chữ số và kí tự đặc biệt`}
+                                    helperText={`Độ dài 8 - 20 kí tự${'\n'}Phải bao gồm: Chữ in hoa, chữ thường, chữ số và kí tự đặc biệt`}
                                 />
                             </div>
                             <div>

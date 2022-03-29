@@ -7,7 +7,7 @@ import styles from './Login.module.css';
 import { InputLarge, ButtonRoundedLarge } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { login } from './../../apis';
-import { api } from './../../constants';
+import { api, cookie } from './../../constants';
 
 function Login() {
     const [validation, setValidation] = useState('');
@@ -21,16 +21,16 @@ function Login() {
         if (account.Username.length === 0 || account.Password.length === 0) return;
         const response = await login.post(JSON.stringify(account));
         if (response.status === api.STATUS_CODE.UNAUTHORIZED) {
-            response.clone().json().then(data => {
+            await response.clone().json().then(data => {
                 setValidation(data.message);
             })
         } else if (response.status === api.STATUS_CODE.OK) {
-            response.clone().json().then(data => {
-                document.cookie = `token=${data.token}`;
-                document.cookie = `userId=${data.userId}`;
+            await response.clone().json().then(data => {
+                document.cookie = `${cookie.TOKEN}=${data.token}`;
+                document.cookie = `${cookie.USER_ID}=${data.userId}`;
                 localStorage.setItem("expireTime", data.expireTime);
             });
-            navigate('/');
+            navigate('/', { replace: true });
         }
     }
 

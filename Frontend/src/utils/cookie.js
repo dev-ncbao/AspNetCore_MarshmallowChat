@@ -4,7 +4,7 @@ export const cookieToObject = () => {
     const cookies = document.cookie.trim();
     const cookieArray = cookies.split(';');
     cookieArray.forEach((val) => {
-        const cookie = val.split('=');
+        const cookie = val.trim().split('=');
         obj[cookie[0]] = cookie[1];
     });
     return obj;

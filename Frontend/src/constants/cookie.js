@@ -1,3 +1,3 @@
-export const expireTime = 'expireTime';
-export const token = 'token';
-export const userId = 'userId';
+export const EXPIRE_TIME = 'expireTime';
+export const TOKEN = 'token';
+export const USER_ID = 'userId';

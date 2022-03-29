@@ -182,3 +182,7 @@ input {
   border: none;
   outline: none;
 }
+
+.height-fit {
+  height: fit-content;
+}

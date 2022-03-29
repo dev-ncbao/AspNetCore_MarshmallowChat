@@ -1,0 +1,21 @@
+.ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.ul li {
+  padding: 4px 14px;
+  border-radius: 40px;
+  background-color: var(--gray-6);
+  color: var(--gray-2);
+  cursor: pointer;
+}
+
+.itemChecked {
+  background-color: var(--primary-1) !important;
+  color: #fff !important;
+}

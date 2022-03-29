@@ -1,10 +1,9 @@
 .container {
     padding: 32px;
     border-radius: 24px;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -40%);
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
     display: flex;
     flex-direction: column;
     gap: 16px;

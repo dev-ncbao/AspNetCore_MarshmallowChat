@@ -8,10 +8,6 @@
   margin: 16px auto 16px;
 }
 
-.searchContainer input[type="text"] {
-  border-radius: 0 40px 40px 0;
-}
-
 .chatsContainer {
   width: 100%;
   overflow-y: auto;
@@ -43,7 +39,7 @@
 .infoWrapper {
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0 12px;
   height: 100%;
 }
 
@@ -139,7 +135,7 @@
 .inputMessage {
   max-height: calc(14px + 24px * 3 - 20px);
   margin: 0;
-  padding: 0;
+  padding: 0.1rem 0;
   overflow-y: auto;
   word-break: break-word;
   word-wrap: break-word;
@@ -171,8 +167,22 @@
 /*  */
 .subItemWrapper {
   height: 50px;
-  padding-left: 30px;
+  padding-left: 24px;
   gap: 10px;
+}
+
+.subItemWrapper:hover {
+  background-color: var(--gray-6);
+}
+
+.fileAndLinkWrapper{
+  height: fit-content !important;
+  padding: 0 !important;
+}
+
+.fileAndLinkWrapper:hover {
+  background-color: unset !important;
+  cursor: unset !important;
 }
 
 .itemName,
@@ -205,27 +215,15 @@
   color: var(--gray-1);
 }
 
-.subNavContainer ul{
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-}
-
-.subNavContainer ul li {
-  padding: 4px 14px;
-  background-color: var(--primary-1);
-  color: #fff;
-  border-radius: 40px;
+.subNavContainer{
+  margin: auto;
 }
 
 .pictureContainer {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  max-width: 100%;
+  justify-content: center;
 }
 
 .pictureContainer div{

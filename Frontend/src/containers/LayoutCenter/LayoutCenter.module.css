@@ -1,5 +1,5 @@
 .container {
     height: inherit;
     flex: 1 1 auto;
-    max-width: calc(100% / 2);
+    /* max-width: calc(100% / 2); */
 }
