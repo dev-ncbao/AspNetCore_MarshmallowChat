@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 //
 import styles from './Login.module.css';
-import { InputLarge, ButtonRoundedLarge } from './../../components';
+import { InputLarge, ButtonRounded } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { login } from './../../apis';
-import { api, cookie } from './../../constants';
+import { api } from './../../constants';
+import {cookie as cookieUtil} from './../../utils'
 
 function Login() {
     const [validation, setValidation] = useState('');
@@ -25,11 +25,22 @@ function Login() {
                 setValidation(data.message);
             })
         } else if (response.status === api.STATUS_CODE.OK) {
-            await response.clone().json().then(data => {
-                document.cookie = `${cookie.TOKEN}=${data.token}`;
-                document.cookie = `${cookie.USER_ID}=${data.userId}`;
-                localStorage.setItem("expireTime", data.expireTime);
-            });
+            // await response.clone().json().then(data => {
+            //     const currentDate = new Date();
+            //     currentDate.setDate(currentDate.getDate() + 7)
+            //     const expires = currentDate.toString();
+            //     const cookies = []
+            //     const storages = []
+            //     const cookieKeys = Object.keys(data.cookies)
+            //     const storageKeys = Object.keys(data.storages)
+            //     cookieKeys.forEach(cookie => {
+            //         cookies.push({name: cookie, value: data.cookies[cookie], expires: expires})
+            //     })
+            //     storageKeys.forEach(storage => {
+            //         storages.push({name: storage, value: data.storages[storage]})
+            //     })
+            //     cookieUtil.setCookie(cookies, storages)
+            // });
             navigate('/', { replace: true });
         }
     }
@@ -80,7 +91,7 @@ function Login() {
                                 </ul>
                             </div>
                         </>}
-                        <ButtonRoundedLarge content='Đăng nhập' onClick={handleLogin} />
+                        <ButtonRounded onClick={handleLogin} >Đăng nhập</ButtonRounded>
                         <Link to='/reset-password' className={clsx('user-select-none', 'clear-a-tag', 'link-color', 'text-body-1')}>Quên mật khẩu?</Link>
                     </div>
                 </CardLarge>

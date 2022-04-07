@@ -19,6 +19,11 @@ export const STATUS_CODE = {
     INTERNAL_SERVER_ERROR: 500,
     SERVICE_UNAVAILABLE: 503
 };
+
+export const SERVER_ERROR_MESSAGE = {
+    500: 'Lỗi máy chủ'
+}
+
 export const HTTP_METHOD = {
     GET: 'GET',
     POST: 'POST',

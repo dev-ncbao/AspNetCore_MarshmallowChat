@@ -1,0 +1,30 @@
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-dark-2);
+}
+
+.container {
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+.container:hover {
+    background-color: var(--gray-6);
+    cursor: pointer;
+}
+
+.name {
+    color: var(--text-dark-2);
+}
+
+.description {
+    color: var(--gray-1);
+}

@@ -14,10 +14,7 @@ function Container() {
 			<Routes>
 				<Route path='/' element={<Home />}>
 					<Route path='chat' element={<Chat />} />
-					<Route path='contact' element={<ContactProvider><Contact /></ContactProvider>} >
-						<Route path='friend' element={<FriendMenu />}/>
-						<Route path='group' />
-					</Route>
+					<Route path='contact' element={<ContactProvider><Contact /></ContactProvider>} />
 				</Route>
 				<Route path='login' element={<Login />} />
 				<Route path='register' element={<Register />} />

@@ -6,6 +6,11 @@ const paths = {
     check: '/login/check'
 }
 
+export const test = async (body) => {
+    const response = await api('/login/test/0', HTTP_METHOD.POST, body);
+    if(response) return response;
+}
+
 export const check = async () => {
     const response = await api(paths.check, HTTP_METHOD.GET);
     if(response) return response;

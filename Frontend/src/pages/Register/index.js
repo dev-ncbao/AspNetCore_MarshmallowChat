@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 //
 import styles from './Register.module.css';
-import { InputLarge, InputSmall, ButtonRoundedLarge, InputRadio } from './../../components';
+import { InputLarge, InputSmall, ButtonRounded, InputRadio } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { UserValidation } from './../../validations';
 import { register } from './../../apis';
@@ -178,7 +178,7 @@ function Register() {
                                 </ul>
                             </div>
                         </>}
-                        <ButtonRoundedLarge content={registered ? 'Trở về Đăng nhập' : 'Đăng ký'} onClick={handleRegister} />
+                        <ButtonRounded onClick={handleRegister} >{registered ? 'Trở về Đăng nhập' : 'Đăng ký'}</ButtonRounded>
                         {!registered && <span>Đã có tài khoản? <Link to='/login' className={clsx('user-select-none', 'clear-a-tag', 'link-color', 'text-body-1')}>Đăng nhập</Link></span>}
                     </div>
                 </CardLarge>

@@ -1,101 +1,40 @@
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import clsx from 'clsx';
+import { useRef } from 'react'
 //
-import { Search } from './../../components';
+import { Search, FriendContainer } from './../../components';
 import styles from './FriendListContent.module.css';
 
 function FriendListContent() {
+    const containerRef = useRef();
+    const friends = [
+        { id: 1, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 2, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 3, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 4, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 5, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 6, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 7, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 8, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 9, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 10, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+        { id: 11, name: 'Nguyễn Chí Bảo', description: '@ncb1403' },
+    ]
     return (
-        <>
-            <Search />
-            <div className={styles.usersContainer}>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
-                </div>
-                <div className={styles.userContainer}>
-                    <div className={styles.userAvatar}></div>
-                    <div className={styles.userInfoContainer}>
-                        <span className={clsx(styles.userName, 'text-headline-3')}>Nguyễn Chí Bảo</span>
-                        <span className={clsx(styles.userUsername, 'text-body-2')}>@ncb1403</span>
-                        <span className={clsx(styles.userProvince, 'text-body-2')}>Cần Thơ</span>
-                    </div>
-                    <div className={styles.buttonContainer}>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonChatTo)}>Nhắn tin</button>
-                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonOption)}>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                        </button>
-                    </div>
+        <div ref={containerRef} className={styles.container}>
+            <div className={styles.searchContainer}>
+                <Search placeholder='Tìm kiếm bạn bè' />
+            </div>
+            <div className={styles.friendsContainer}>
+                <div className={styles.friendsWrapper}>
+                    {
+                        friends.map((friend, index) => {
+                            return (
+                                <FriendContainer key={index} friend={friend} containerRef={containerRef}/>
+                            )
+                        })
+                    }
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

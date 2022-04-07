@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 //
 import styles from './ResetPassword.module.css';
-import { InputLarge, ButtonRoundedLarge } from './../../components';
+import { InputLarge, ButtonRounded } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 
 function ResetPassword() {
@@ -48,7 +48,7 @@ function ResetPassword() {
                         </div>
                     }
                     <div className={clsx('d-flex', styles.buttonContainer, 'align-center')}>
-                        <ButtonRoundedLarge onClick={handleButtonClick} content={reseted ? 'Trở về Đăng nhập' : 'Gửi yêu cầu'} />
+                        <ButtonRounded onClick={handleButtonClick} >{reseted ? 'Trở về Đăng nhập' : 'Gửi yêu cầu'}</ButtonRounded>
                         {!reseted && <span>
                             {'Quay lại trang '}
                             <Link to='/login' className={clsx('user-select-none', 'clear-a-tag', 'link-color', 'text-body-1')}>

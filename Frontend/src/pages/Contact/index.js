@@ -1,35 +1,41 @@
 import clsx from 'clsx';
-import { Outlet } from 'react-router-dom';
 //
 import { useContactStore } from './../../stores/contact';
-import { setNavChecked } from './../../stores/contact/actions';
-import { NavRounded } from './../../components';
+import { setNavChecked, setMenuChecked } from './../../stores/contact/actions';
+import { NavSquared, NavRounded } from './../../components';
 import { Layout, LayoutLeft, LayoutCenter } from './../../containers';
 import styles from './Contact.module.css';
 
 function Contact() {
     const [state, dispatch] = useContactStore();
     const { nav, menu } = state;
+    const { checked: navChecked } = nav;
+    const { checked: menuChecked } = menu[navChecked];
     return (
         <Layout>
             <LayoutLeft>
                 <div className={clsx('d-flex', 'flex-col', styles.leftContainer)}>
-                    <div className={styles.subNavContainer}>
+                    <div className={styles.navContainer}>
                         <NavRounded
-                            items={nav.items}
-                            checked={nav.checked}
+                            {...nav}
                             dispatch={dispatch}
-                            action={setNavChecked}
+                            actions={{ setNavChecked }}
                         />
                     </div>
-                </div>
-                <div className={styles.menuContainer}>
-                    <Outlet context={{...menu[nav.checked]}}/>
+                    <div className={styles.menuContainer}>
+                        <div className={styles.menuWrapper}>
+                            <NavSquared
+                                {...menu[navChecked]}
+                                dispatch={dispatch}
+                                actions={{ setMenuChecked }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </LayoutLeft>
             <LayoutCenter>
-                <div className={clsx('d-flex', 'flex-col', styles.centerContainer)}>
-                    {menu[nav.checked].components[menu[nav.checked].checked]}
+                <div className={styles.centerContainer}>
+                    {menu[navChecked].components[menuChecked]}
                 </div>
             </LayoutCenter>
         </Layout>

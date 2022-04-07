@@ -1,70 +1,109 @@
-import { Link } from 'react-router-dom';
-import clsx from 'clsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faBell } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
+import clsx from 'clsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretDown, faBell, faComment, faUserGroup, faArrowRightFromBracket, faKey } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 //
-import { MenuOption } from './../../containers';
-import { NavItem, ButtonCircle } from '../../components';
-import { navItems } from './nav.config';
-import Logo from './../../assets/img/Logo.png';
+import { Navigation, ContextMenu } from './../../features'
+import { ButtonCircular, ContextMenuItem } from '../../components'
+import { route } from './../../constants'
+import Logo from './../../assets/img/Logo.png'
 import styles from './Header.module.css'
+import {cookie} from './../../utils'
+//
+import { login } from './../../apis'
 
 function Header() {
-    const [toggleMenu, setToggleMenu] = useState(false);
+    const [toggleMenu, setToggleMenu] = useState(false)
+    const navigate = useNavigate()
+    const navigationItems = [
+        {
+            name: 'Nhắn tin',
+            path: route.ROUTES.CHAT,
+            icon: <FontAwesomeIcon icon={faComment} />
+        },
+        {
+            name: 'Liên hệ',
+            path: route.ROUTES.CONTACT,
+            icon: <FontAwesomeIcon icon={faUserGroup} />
+        }
+    ]
+    const contextMenuItems = [
+        {
+            name: 'Đổi mật khẩu',
+            description: '',
+            icon: faKey,
+            onClick: () => {
+                navigate(route.ROUTES.LOGIN)
+            }
+        },
+        {
+            name: 'Đăng xuất',
+            description: '',
+            icon: faArrowRightFromBracket,
+            onClick: () => {
+                cookie.clearCookie()
+                navigate(route.ROUTES.LOGIN)
+            }
+        }
+    ]
 
     const handleToggleNotification = () => {
         console.log('toggle noti');
+        login.test(JSON.stringify({
+            username: 'nguyebao',
+            password: '123456789'
+        }))
+
     }
 
     const handleToggleMenu = () => {
-        setToggleMenu(!toggleMenu);
+        setToggleMenu(prev => !prev)
     }
 
     return (
         <div className={clsx(styles.container, 'd-flex')}>
-            <div className={clsx('d-flex', styles.headerWrapper)}>
+            <div className={clsx('d-flex', styles.wrapper)}>
                 {/* Logo */}
                 <div className={clsx(styles.logoContainer)}>
-                    <Link to='/'
-                        className={clsx('d-flex', 'align-center', styles.logoWrapper, 'cursor-pointer', 'user-select-none', 'clear-a-tag')}
-                    >
+                    <Link to='/' className={clsx('d-flex', 'align-center', styles.logoWrapper, 'cursor-pointer', 'user-select-none', 'clear-a-tag')}>
                         <img className={styles.logo} src={Logo} alt='Logo' />
                         <span className='text-headline-2'>Marshmallow chat</span>
                     </Link>
                 </div>
                 {/* Navigation */}
                 <div className={clsx('d-flex', 'align-center', styles.navigationContainer)}>
-                    {
-                        navItems.map((item, index) => {
-                            return <NavItem key={index} path={item.path}>{item.Icon}</NavItem>
-                        })
-                    }
+                    <Navigation items={navigationItems} />
                 </div >
-                {/* Menu and Notification*/}
+                {/* ContextMenu and Notification*/}
                 <div className={clsx('d-flex', 'align-center', styles.menuContainer)}>
                     <div className={styles.menuItemContainer}>
-                        <ButtonCircle onClick={handleToggleNotification}>
+                        <ButtonCircular onClick={handleToggleNotification}>
                             <FontAwesomeIcon icon={faBell} />
-                        </ButtonCircle>
-                        {/* <div className={styles.mainMenuContainer}>
-                            <MenuOption />
-                        </div> */}
+                        </ButtonCircular>
                     </div>
                     <div className={styles.menuItemContainer}>
-                        <ButtonCircle onClick={handleToggleMenu}>
+                        <ButtonCircular onClick={handleToggleMenu}>
                             <FontAwesomeIcon icon={faCaretDown} />
-                        </ButtonCircle>
+                        </ButtonCircular>
                         {toggleMenu && (
-                            <div className={styles.mainMenuContainer}>
-                                <MenuOption />
+                            <div className={clsx(styles.contextMenuContainer, 'header-context-menu')}>
+                                <ContextMenu backdropOnClick={handleToggleMenu}>
+                                    {
+                                        contextMenuItems.map((item, index) => {
+                                            return (
+                                                <ContextMenuItem key={index} name={item.name} description={item.description} icon={<FontAwesomeIcon icon={item.icon} />} onClick={item.onClick} />
+                                            )
+                                        })
+                                    }
+                                </ContextMenu>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header

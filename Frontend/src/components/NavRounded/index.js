@@ -1,10 +1,10 @@
 import styles from './NavRounded.module.css';
+// 
 
-function NavRounded({ items = [], checked, dispatch, action }) {
+function NavRounded({ items, checked, dispatch, actions }) {
     const handleItemClick = (index) => {
-        dispatch(action({ checked: index }));
+        dispatch(actions.setNavChecked({ checked: index }));
     }
-
     return (
         <>
             <ul className={styles.ul}>

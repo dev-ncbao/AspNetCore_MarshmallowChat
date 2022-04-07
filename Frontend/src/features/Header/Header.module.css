@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.headerWrapper {
+.wrapper {
   height: 100%;
   width: 100%;
 }
@@ -45,8 +45,7 @@
   position: relative;
 }
 
-/* Main menu */
-.mainMenuContainer {
+.contextMenuContainer {
   position: absolute;
   right: 0;
   padding-top: 10px;

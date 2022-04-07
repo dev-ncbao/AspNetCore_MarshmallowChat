@@ -1,6 +1,6 @@
 import { faUserGroup, faUserPlus, faUserClock, faUsers } from "@fortawesome/free-solid-svg-icons";
 //
-import { FriendListContent, FriendAddContent, FriendInviteContent } from './../../features';
+import { FriendListContent, FriendAddContent, FriendInviteContent, GroupListContent, GroupAddContent } from './../../features';
 import * as types from './types';
 
 const initState = {
@@ -18,7 +18,7 @@ const initState = {
         { // group
             items: ['Danh sách nhóm chat', 'Tạo nhóm'],
             icons: [faUsers, faUserPlus],
-            components: [<FriendListContent />, <FriendAddContent />],
+            components: [<GroupListContent />, <GroupAddContent />],
             checked: 0
         }
     ]
@@ -30,14 +30,17 @@ const reducer = (state = initState, action) => {
     switch (type) {
         case types.SET_NAV_CHECKED:
             if (state.nav.checked !== payload.checked) {
-                next = {...state};
+                next = { ...state };
                 next.nav.checked = payload.checked;
+                next.menu.forEach((value) => {
+                    value.checked = 0;
+                });
                 return next;
             }
             return state;
         case types.SET_MENU_CHECKED:
-            if(state.menu[state.nav.checked].checked !== payload.checked){
-                next = {...state};
+            if (state.menu[state.nav.checked].checked !== payload.checked) {
+                next = { ...state };
                 next.menu[next.nav.checked].checked = payload.checked;
                 return next;
             }

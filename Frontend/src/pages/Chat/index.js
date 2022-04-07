@@ -245,22 +245,24 @@ function Chat() {
                             itemName={'Tập tin và liên kết'}
                             icon={faChevronDown}
                         >
-                             <div className={clsx(styles.subItemWrapper, styles.fileAndLinkWrapper, 'd-flex', 'align-center', 'cursor-pointer', 'flex-col')}>
+                            <div className={clsx(styles.subItemWrapper, styles.fileAndLinkWrapper, 'd-flex', 'align-center', 'cursor-pointer', 'flex-col')}>
                                 <div className={styles.subNavContainer}>
                                     <NavRounded
                                         items={['File phương tiện', 'File', 'Liên kết']}
                                     />
                                 </div>
                                 <div className={styles.pictureContainer}>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
+                                    <div className={styles.pictureWrapper}>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
                                 </div>
                             </div>
                         </ChatSettingItem>

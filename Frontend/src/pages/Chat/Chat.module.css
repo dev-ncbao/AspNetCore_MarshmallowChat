@@ -175,7 +175,7 @@
   background-color: var(--gray-6);
 }
 
-.fileAndLinkWrapper{
+.fileAndLinkWrapper {
   height: fit-content !important;
   padding: 0 !important;
 }
@@ -215,18 +215,26 @@
   color: var(--gray-1);
 }
 
-.subNavContainer{
+.subNavContainer {
   margin: auto;
 }
 
 .pictureContainer {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: 100%;
 }
 
-.pictureContainer div{
+.pictureWrapper {
+  --block: 70px;
+  --gap: 10px;
+  margin: auto;
+  max-width: calc(4 * var(--block) + 3 * var(--gap));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.pictureWrapper div {
   width: 70px;
   height: 70px;
   background: var(--gradient-2);
