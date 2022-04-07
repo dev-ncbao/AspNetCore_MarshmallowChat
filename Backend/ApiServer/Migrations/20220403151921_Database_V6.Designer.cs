@@ -4,14 +4,16 @@ using ApiServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(MarshmallowChatContext))]
-    partial class MarshmallowChatContextModelSnapshot : ModelSnapshot
+    [Migration("20220403151921_Database_V6")]
+    partial class Database_V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,20 +24,20 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("ApiServer.Models.FriendInvitation", b =>
                 {
-                    b.Property<int>("From")
+                    b.Property<int>("User1Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("To")
+                    b.Property<int>("User2Id")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("From", "To");
+                    b.HasKey("User1Id", "User2Id");
 
-                    b.HasIndex("To");
+                    b.HasIndex("User2Id");
 
-                    b.ToTable("FriendInvitation");
+                    b.ToTable("FriendInvitations");
                 });
 
             modelBuilder.Entity("ApiServer.Models.Friendship", b =>
@@ -205,19 +207,19 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("ApiServer.Models.FriendInvitation", b =>
                 {
-                    b.HasOne("ApiServer.Models.User", "FromUser")
+                    b.HasOne("ApiServer.Models.User", "User1")
                         .WithMany("FriendInvitation1s")
-                        .HasForeignKey("From")
+                        .HasForeignKey("User1Id")
                         .IsRequired();
 
-                    b.HasOne("ApiServer.Models.User", "ToUser")
+                    b.HasOne("ApiServer.Models.User", "User2")
                         .WithMany("FriendInvitation2s")
-                        .HasForeignKey("To")
+                        .HasForeignKey("User2Id")
                         .IsRequired();
 
-                    b.Navigation("FromUser");
+                    b.Navigation("User1");
 
-                    b.Navigation("ToUser");
+                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("ApiServer.Models.Friendship", b =>

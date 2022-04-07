@@ -4,14 +4,16 @@ using ApiServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ApiServer.Migrations
 {
     [DbContext(typeof(MarshmallowChatContext))]
-    partial class MarshmallowChatContextModelSnapshot : ModelSnapshot
+    [Migration("20220402064758_Database_V5")]
+    partial class Database_V5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,24 +21,6 @@ namespace ApiServer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ApiServer.Models.FriendInvitation", b =>
-                {
-                    b.Property<int>("From")
-                        .HasColumnType("int");
-
-                    b.Property<int>("To")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("From", "To");
-
-                    b.HasIndex("To");
-
-                    b.ToTable("FriendInvitation");
-                });
 
             modelBuilder.Entity("ApiServer.Models.Friendship", b =>
                 {
@@ -183,7 +167,6 @@ namespace ApiServer.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Secret")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
@@ -201,23 +184,6 @@ namespace ApiServer.Migrations
                         .IsUnique();
 
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("ApiServer.Models.FriendInvitation", b =>
-                {
-                    b.HasOne("ApiServer.Models.User", "FromUser")
-                        .WithMany("FriendInvitation1s")
-                        .HasForeignKey("From")
-                        .IsRequired();
-
-                    b.HasOne("ApiServer.Models.User", "ToUser")
-                        .WithMany("FriendInvitation2s")
-                        .HasForeignKey("To")
-                        .IsRequired();
-
-                    b.Navigation("FromUser");
-
-                    b.Navigation("ToUser");
                 });
 
             modelBuilder.Entity("ApiServer.Models.Friendship", b =>
@@ -291,10 +257,6 @@ namespace ApiServer.Migrations
 
             modelBuilder.Entity("ApiServer.Models.User", b =>
                 {
-                    b.Navigation("FriendInvitation1s");
-
-                    b.Navigation("FriendInvitation2s");
-
                     b.Navigation("FriendshipUser1s");
 
                     b.Navigation("FriendshipUser2s");

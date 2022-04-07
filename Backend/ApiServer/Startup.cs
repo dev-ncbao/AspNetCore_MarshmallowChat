@@ -38,14 +38,9 @@ namespace ApiServer
                     configure.AllowAnyMethod();
                     configure.WithHeaders(
                         HeaderNames.ContentType,
-                        HeaderNames.Accept,
-                        "credentials",
-                        HeaderNames.AccessControlAllowOrigin,
-                        "access-control-allow-origin",
-                        "access-control-allow-credentials",
-                        HeaderNames.AccessControlAllowCredentials,
-                        "mode"
+                        HeaderNames.Authorization
                     );
+                    configure.AllowCredentials();
                 });
             });
 
@@ -71,7 +66,7 @@ namespace ApiServer
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiServer", Version = "v1" });
             });
 
-            services.AddSingleton<MarshmallowChatContext>();
+            services.AddTransient<MarshmallowChatContext>();
             /*services.AddSingleton<IConfiguration>(Configuration);*/
         }
 

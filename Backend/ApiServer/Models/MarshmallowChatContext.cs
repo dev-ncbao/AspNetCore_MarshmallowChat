@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -24,96 +25,7 @@ namespace ApiServer.Models
         public virtual DbSet<RoomInfo> RoomInfos { get; set; }
         public virtual DbSet<RoomMember> RoomMembers { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
-        public void CreateTempData()
-        {
-            MarshmallowChatContext Db = new MarshmallowChatContext();
-            //Db.Database.EnsureDeleted();
-            if (true)
-            {
-                List<User> lstUser = new List<User>(){
-                new User(){
-                    Avatar = null,
-                    DateCreated = System.DateTime.Now,
-                    DayOfBirth = new System.DateTime(2000, 10, 10),
-                    Email = "baob1809327@gmail.com",
-                    FirstName = "Nguyễn Chí",
-                    LastName = "Bảo",
-                    Gender = "Nam",
-                    Username = "Nguyenbao1403",
-                    Password = "14032017"
-                },
-                new User(){
-                    Avatar = null,
-                    DateCreated = System.DateTime.Now,
-                    DayOfBirth = new System.DateTime(2000, 10, 10),
-                    Email = "baob1809327@gmail.com",
-                    FirstName = "Nguyễn Chí",
-                    LastName = "Bảo Hi",
-                    Gender = "Nam",
-                    Username = "Nguyenbao2017",
-                    Password = "14032017"
-                }
-            };
-                lstUser.ForEach(user =>
-                {
-                    Db.Users.Add(user);
-                    Db.SaveChanges();
-                });
-                //
-                Friendship friendship = new Friendship()
-                {
-                    DateCreated = System.DateTime.Now,
-                    User1Id = 1,
-                    User2Id = 2,
-                };
-                Db.Friendships.Add(friendship);
-                Db.SaveChanges();
-                //
-                Room room = new Room()
-                {
-                    Type = "Normal"
-                };
-                Db.Rooms.Add(room);
-                Db.SaveChanges();
-                //
-                RoomMember roomMember = new RoomMember()
-                {
-                    RoomId = 1,
-                    UserId = 1
-                };
-                RoomMember roomMember2 = new RoomMember()
-                {
-                    RoomId = 1,
-                    UserId = 2
-                };
-                Db.RoomMembers.Add(roomMember);
-                Db.RoomMembers.Add(roomMember2);
-                Db.SaveChanges();
-                //
-                List<Message> lstMessage = new List<Message>(){
-                    new Message(){
-                        RoomId = 1,
-                        TimeCreated = System.DateTime.Now,
-                        Type = "Text",
-                        UserId = 1,
-                        Content = "Chào bạn tôi là Nguyễn Chí Bảo, rất vui được làm quen với bạn."
-                    },
-                    new Message(){
-                        RoomId = 1,
-                        TimeCreated = System.DateTime.Now,
-                        Type = "Text",
-                        UserId = 2,
-                        Content = "Chào bạn tôi là Nguyễn Chí Bảo Hi, rất vui được làm quen với bạn."
-                    }
-                };
-                lstMessage.ForEach(message =>
-                {
-                    Db.Messages.Add(message);
-                    Db.SaveChanges();
-                });
-            }
-        }
+        public virtual DbSet<FriendInvitation> FriendInvitations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -127,6 +39,19 @@ namespace ApiServer.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<FriendInvitation>(entity =>
+            {
+                entity.ToTable("FriendInvitation");
+
+                entity.HasOne(d => d.FromUser).WithMany(p => p.FriendInvitation1s).HasForeignKey(d => d.From).OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.ToUser).WithMany(p => p.FriendInvitation2s).HasForeignKey(d => d.To).OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasKey(e => new { e.From, e.To });
+
+                entity.Property(e => e.DateCreated).IsRequired();
+            });
 
             modelBuilder.Entity<Friendship>(entity =>
             {
@@ -227,6 +152,9 @@ namespace ApiServer.Models
             {
                 entity.ToTable("User");
 
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Avatar).HasMaxLength(100);
 
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
@@ -260,6 +188,7 @@ namespace ApiServer.Models
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(20);
+                entity.Property(e => e.Secret).HasMaxLength(64).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);
