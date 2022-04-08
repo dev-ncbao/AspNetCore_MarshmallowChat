@@ -13,4 +13,6 @@ export { default as ChatSettingItem } from './ChatSettingItem';
 export { default as NavRounded } from './NavRounded';
 export { default as NavSquared } from './NavSquared';
 export { default as ContactCard } from './ContactCard';
-export { default as FriendContainer } from './FriendContainer';
+export { default as FriendContainer } from './FriendContainer'
+export { default as InvitationContainer } from './InvitationContainer'
+export { default as FriendAdditionContainer } from './FriendAdditionContainer'

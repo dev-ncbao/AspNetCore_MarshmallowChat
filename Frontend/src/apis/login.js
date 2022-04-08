@@ -1,22 +1,8 @@
-import api from './../apis';
-import { HTTP_METHOD } from '../constants/api';
+import api from './../apis'
+import { apis, https } from './../constants'
 
-const paths = {
-    origin: '/login',
-    check: '/login/check'
-}
+export const test = async (body) => await api('/login/test/0', https.HTTP_METHOD.POST, body)
 
-export const test = async (body) => {
-    const response = await api('/login/test/0', HTTP_METHOD.POST, body);
-    if(response) return response;
-}
+export const check = async () => await api(apis.LOGIN.CHECK, https.HTTP_METHOD.GET)
 
-export const check = async () => {
-    const response = await api(paths.check, HTTP_METHOD.GET);
-    if(response) return response;
-}
-
-export const post = async (body) => {
-    const response = await api(paths.origin, HTTP_METHOD.POST, body);
-    if(response) return response;
-}
+export const post = async (body) => await api(apis.LOGIN.LOGIN, https.HTTP_METHOD.POST, body)

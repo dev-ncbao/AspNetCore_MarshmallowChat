@@ -1,25 +1,29 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //
 import { Header } from './../../features';
 import { Body, AppContainer } from './../../containers';
 import { login } from './../../apis';
-import { api, route } from '../../constants';
+import { https, routes } from '../../constants';
 
 function Home() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    useEffect(async () => {
-        if (!route.ALLOW_ANONYMOUS.includes(location.pathname)) {
-            const response = await login.check().catch(() => {
-                navigate(route.ROUTES.LOGIN);
-            });
-            if (response.status === api.STATUS_CODE.UNAUTHORIZED)
-                navigate(route.ROUTES.LOGIN);
-            else if (response.status === api.STATUS_CODE.OK && location.pathname === route.ROUTES.HOME)
-                navigate(route.ROUTES.CHAT);
+    useEffect(() => {
+        const callback = async () => {
+            if (!routes.ALLOW_ANONYMOUS.includes(location.pathname)) {
+                const response = await login.check().catch(() => {
+                    navigate(routes.ROUTES.LOGIN);
+                });
+                if(!response) return
+                if (response.status === https.STATUS_CODE.UNAUTHORIZED)
+                    navigate(routes.ROUTES.LOGIN);
+                else if (response.status === https.STATUS_CODE.OK && location.pathname === routes.ROUTES.HOME)
+                    navigate(routes.ROUTES.CHAT);
+            }
         }
+        callback();
     }, [location.pathname]);
 
     return (

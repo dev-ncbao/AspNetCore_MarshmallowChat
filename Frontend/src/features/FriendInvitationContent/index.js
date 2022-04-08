@@ -1,25 +1,25 @@
 import { useRef, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 //
-import { cookie } from './../../utils'
-import { friend } from './../../apis'
-import { https, cookies, routes } from './../../constants'
-import { Search, FriendContainer } from './../../components';
-import styles from './FriendListContent.module.css';
+import { cookie } from '../../utils'
+import { friend } from '../../apis'
+import { https, cookies, routes } from '../../constants'
+import { Search, InvitationContainer } from '../../components';
+import styles from './FriendInvitationContent.module.css';
 
-function FriendListContent() {
+function FriendInvitationContent() {
     const navigate = useNavigate()
     const containerRef = useRef();
-    const [friendIds, setFriendIds] = useState([])
+    const [inviterIds, setInviterIds] = useState([])
     useEffect(() => {
         const callback = async () => {
             const cookieObj = cookie.cookieToObject()
-            const response = await friend.get(cookieObj[cookies.USER_ID], friendIds.length)
+            const response = await friend.inviation(cookieObj[cookies.USER_ID], inviterIds.length)
             if (!response) return
             if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                 navigate(routes.ROUTES.LOGIN)
             else if (response.status === https.STATUS_CODE.OK) {
-                await response.clone().json().then(data => setFriendIds(prev => [...prev, ...data]))
+                await response.clone().json().then(data => setInviterIds(prev => [...prev, ...data]))
             }
         }
         callback()
@@ -32,9 +32,9 @@ function FriendListContent() {
             <div className={styles.friendsContainer}>
                 <div className={styles.friendsWrapper}>
                     {
-                        friendIds.map((friendId, index) => {
+                        inviterIds.map((inviterId, index) => {
                             return (
-                                <FriendContainer key={index} friendId={friendId} containerRef={containerRef} />
+                                <InvitationContainer key={index} inviterId={inviterId} containerRef={containerRef}/>
                             )
                         })
                     }
@@ -44,4 +44,4 @@ function FriendListContent() {
     )
 }
 
-export default FriendListContent
+export default FriendInvitationContent

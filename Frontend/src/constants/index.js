@@ -1,4 +1,4 @@
-export * as api from './api';
-export * as cookie from './cookie';
-export * as route from './route';
-export * as storage from './storage'
+export * as https from './https';
+export * as cookies from './cookies';
+export * as routes from './routes';
+export * as apis from './apis';

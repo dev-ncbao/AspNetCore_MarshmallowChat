@@ -6,10 +6,9 @@ import { useState } from 'react'
 //
 import { Navigation, ContextMenu } from './../../features'
 import { ButtonCircular, ContextMenuItem } from '../../components'
-import { route } from './../../constants'
+import { routes } from './../../constants'
 import Logo from './../../assets/img/Logo.png'
 import styles from './Header.module.css'
-import {cookie} from './../../utils'
 //
 import { login } from './../../apis'
 
@@ -19,12 +18,12 @@ function Header() {
     const navigationItems = [
         {
             name: 'Nhắn tin',
-            path: route.ROUTES.CHAT,
+            path: routes.ROUTES.CHAT,
             icon: <FontAwesomeIcon icon={faComment} />
         },
         {
             name: 'Liên hệ',
-            path: route.ROUTES.CONTACT,
+            path: routes.ROUTES.CONTACT,
             icon: <FontAwesomeIcon icon={faUserGroup} />
         }
     ]
@@ -34,7 +33,7 @@ function Header() {
             description: '',
             icon: faKey,
             onClick: () => {
-                navigate(route.ROUTES.LOGIN)
+                navigate(routes.ROUTES.LOGIN)
             }
         },
         {
@@ -42,8 +41,7 @@ function Header() {
             description: '',
             icon: faArrowRightFromBracket,
             onClick: () => {
-                cookie.clearCookie()
-                navigate(route.ROUTES.LOGIN)
+                navigate(routes.ROUTES.LOGIN)
             }
         }
     ]

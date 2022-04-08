@@ -1,13 +1,12 @@
-import { SERVER_URL, HTTP_METHOD, STATUS_CODE } from "../constants/api";
-import { cookie as cookieConstant } from "../constants";
-import { cookie as cookieUtil } from './../utils';
+import { cookie } from './../utils';
+import { cookies, https } from './../constants'
 
 const api = async (path, method, body, headers) => {
-    const cookies = cookieUtil.cookieToObject();
-    const response = await fetch(`${SERVER_URL}${path}`, {
+    const cookiesObj = cookie.cookieToObject();
+    const response = await fetch(`${https.SERVER_URL}${path}`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${(cookies && cookies.token) || null}`,
+            Authorization: `Bearer ${(cookiesObj && cookiesObj[cookies.TOKEN]) || null}`,
             ...headers
         },
         credentials: 'include',
@@ -20,4 +19,5 @@ const api = async (path, method, body, headers) => {
 export default api;
 
 export * as login from './login';
-export * as register from './register';
+export * as user from './user';
+export * as friend from './friend'

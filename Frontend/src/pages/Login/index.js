@@ -6,8 +6,7 @@ import styles from './Login.module.css';
 import { InputLarge, ButtonRounded } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { login } from './../../apis';
-import { api } from './../../constants';
-import {cookie as cookieUtil} from './../../utils'
+import { https } from './../../constants';
 
 function Login() {
     const [validation, setValidation] = useState('');
@@ -20,29 +19,13 @@ function Login() {
     const handleLogin = async () => {
         if (account.Username.length === 0 || account.Password.length === 0) return;
         const response = await login.post(JSON.stringify(account));
-        if (response.status === api.STATUS_CODE.UNAUTHORIZED) {
+        if(!response) return
+        if (response.status === https.STATUS_CODE.UNAUTHORIZED)
             await response.clone().json().then(data => {
                 setValidation(data.message);
             })
-        } else if (response.status === api.STATUS_CODE.OK) {
-            // await response.clone().json().then(data => {
-            //     const currentDate = new Date();
-            //     currentDate.setDate(currentDate.getDate() + 7)
-            //     const expires = currentDate.toString();
-            //     const cookies = []
-            //     const storages = []
-            //     const cookieKeys = Object.keys(data.cookies)
-            //     const storageKeys = Object.keys(data.storages)
-            //     cookieKeys.forEach(cookie => {
-            //         cookies.push({name: cookie, value: data.cookies[cookie], expires: expires})
-            //     })
-            //     storageKeys.forEach(storage => {
-            //         storages.push({name: storage, value: data.storages[storage]})
-            //     })
-            //     cookieUtil.setCookie(cookies, storages)
-            // });
+        else if (response.status === https.STATUS_CODE.OK)
             navigate('/', { replace: true });
-        }
     }
 
     const handleChange = (e) => {

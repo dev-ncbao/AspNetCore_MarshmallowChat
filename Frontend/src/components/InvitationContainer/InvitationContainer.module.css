@@ -1,0 +1,60 @@
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  background-color: var(--primary-1);
+  border-radius: 50%;
+}
+
+.name {
+  color: var(--text-dark-2);
+}
+
+.description {
+  color: var(--gray-2);
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  position: relative;
+}
+
+.buttonLeft {
+  height: 36px;
+  padding: 6px 20px;
+  border-radius: 5px;
+  background: var(--primary-1);
+  color: #fff;
+  cursor: pointer;
+}
+
+.buttonRight {
+  height: 36px;
+  width: 36px;
+  border-radius: 5px;
+  background: var(--gray-6);
+  color: var(--gray-2);
+  cursor: pointer;
+}
+
+.contextMenuContainer {
+  position: absolute;
+  padding-bottom: 36px;
+}
+
+.leftSide {
+  bottom: 0;
+  right: 0;
+}
+
+.rightSide {
+  bottom: 0;
+  left: 0;
+}

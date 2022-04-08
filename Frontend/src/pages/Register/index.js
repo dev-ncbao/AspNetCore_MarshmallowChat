@@ -7,8 +7,8 @@ import styles from './Register.module.css';
 import { InputLarge, InputSmall, ButtonRounded, InputRadio } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { UserValidation } from './../../validations';
-import { register } from './../../apis';
-import { api } from './../../constants';
+import { user } from './../../apis';
+import { https } from './../../constants';
 
 function Register() {
     const [account, setAccount] = useState({
@@ -68,16 +68,17 @@ function Register() {
             let user = { ...account };
             delete user.PasswordSecondary;
             if (isValid) {
-                const response = await register.post(JSON.stringify(user));
-                if (response.status === api.STATUS_CODE.CONFLICT
-                    || response.status === api.STATUS_CODE.INTERNAL_SERVER_ERROR) {
+                const response = await user.post(JSON.stringify(user));
+                if(!response)
+                if (response.status === https.STATUS_CODE.CONFLICT
+                    || response.status === https.STATUS_CODE.INTERNAL_SERVER_ERROR) {
                     response.clone().json().then(data => {
                         let validColumns = { ...validations };
                         validColumns.ServerResponse = { message: data.message };
                         setValidations(validColumns);
                     });
                 }
-                else if (response.status === api.STATUS_CODE.CREATED) {
+                else if (response.status === https.STATUS_CODE.CREATED) {
                     setRegistered(true);
                 }
             }

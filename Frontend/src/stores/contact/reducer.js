@@ -1,6 +1,6 @@
 import { faUserGroup, faUserPlus, faUserClock, faUsers } from "@fortawesome/free-solid-svg-icons";
 //
-import { FriendListContent, FriendAddContent, FriendInviteContent, GroupListContent, GroupAddContent } from './../../features';
+import { FriendListContent, FriendAdditionContent, FriendInvitationContent, GroupListContent, GroupAddContent } from './../../features';
 import * as types from './types';
 
 const initState = {
@@ -12,7 +12,7 @@ const initState = {
         { // friend
             items: ['Danh sách bạn bè', 'Thêm bạn mới', 'Lời mời kết bạn'],
             icons: [faUserGroup, faUserPlus, faUserClock],
-            components: [<FriendListContent />, <FriendAddContent />, <FriendInviteContent />],
+            components: [<FriendListContent />, <FriendAdditionContent />, <FriendInvitationContent />],
             checked: 0
         },
         { // group

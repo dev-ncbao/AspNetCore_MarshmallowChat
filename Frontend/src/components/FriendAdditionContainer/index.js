@@ -8,11 +8,11 @@ import { https, routes } from './../../constants'
 import { user } from './../../apis'
 import { ContextMenuItem, ContactCard } from './../../components'
 import { ContextMenu } from './../../features';
-import styles from './FriendContainer.module.css'
+import styles from './FriendAdditionContainer.module.css'
 
-function FriendContainer({ friendId, containerRef }) {
+function FriendAdditionContainer({ inviterId, containerRef }) {
     const navigate = useNavigate()
-    const [friend, setFriend] = useState({})
+    const [inviter, setInviter] = useState({})
     const [toggleMenu, setToggleMenu] = useState(false);
     const [contextOverflow, setContextOverflow] = useState(false);
     const contextContainerRef = useRef();
@@ -26,12 +26,12 @@ function FriendContainer({ friendId, containerRef }) {
     ]
     useEffect(() => {
         const callback = async () => {
-            const response = await user.get(friendId)
+            const response = await user.get(inviterId)
             if (!response) return
             if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                 navigate(routes.ROUTES.LOGIN)
             else if (response.status === https.STATUS_CODE.OK) {
-                await response.clone().json().then(data => setFriend(() => data))
+                await response.clone().json().then(data => setInviter(() => data))
             }
         }
         callback()
@@ -55,8 +55,8 @@ function FriendContainer({ friendId, containerRef }) {
         <ContactCard>
             <div className={styles.avatar}></div>
             <div className={styles.infoContainer}>
-                <span className={clsx(styles.name, 'text-headline-3')}>{`${friend.FirstName} ${friend.LastName}`}</span>
-                <span className={clsx(styles.description, 'text-body-2')}>{friend.Username}</span>
+                <span className={clsx(styles.name, 'text-headline-3')}>{`${inviter.FirstName} ${inviter.LastName}`}</span>
+                <span className={clsx(styles.description, 'text-body-2')}>{inviter.Username}</span>
             </div>
             <div id='context' className={styles.buttonContainer}>
                 <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Nhắn tin</button>
@@ -81,4 +81,4 @@ function FriendContainer({ friendId, containerRef }) {
     )
 }
 
-export default FriendContainer
+export default FriendAdditionContainer
