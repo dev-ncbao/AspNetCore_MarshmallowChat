@@ -15,13 +15,24 @@ namespace ApiServer.Controllers
     [Authorize]
     [ApiController]
     [Route("api/friend")]
-    public class FriendshipController : ControllerBase
+    public class FriendController : ControllerBase
     {
         private readonly MarshmallowChatContext _context;
 
-        public FriendshipController(MarshmallowChatContext context)
+        public FriendController(MarshmallowChatContext context)
         {
             _context = context;
+        }
+
+        [HttpGet]
+        [Route("~/api/user/{id:int}/friend/invitaion/{length:int?}")]
+        public async Task<IActionResult> GetInvitations(int id, int length = 0)
+        {
+            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
+            if (length < 0 || id != requesterId) return BadRequest();
+            List<int> ids = await FriendInvitationRepository.SelectPartFriendInvitation(_context, id, length);
+            return Ok(await JsonUtil.SerializeAsync(ids));
         }
 
         [HttpGet]
@@ -50,7 +61,5 @@ namespace ApiServer.Controllers
             if (friendship == null) return StatusCode(500);
             return Created("", null);
         }
-
-
     }
 }

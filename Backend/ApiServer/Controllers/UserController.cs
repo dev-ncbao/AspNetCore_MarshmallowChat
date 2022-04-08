@@ -27,6 +27,15 @@ namespace ApiServer.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            CustomModels.User user = await UserRepository.SelectCustomUserAsync(_context, id);
+            return Ok(await JsonUtil.SerializeAsync<CustomModels.User>(user));
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Post(JsonDocument jd)

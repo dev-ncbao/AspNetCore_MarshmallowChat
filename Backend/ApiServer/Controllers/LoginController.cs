@@ -31,13 +31,12 @@ namespace ApiServer
         [AllowAnonymous]
         [HttpGet]
         [Route("~/api/user/{id:int}/friend/invitation/{length:int?}")]
-        public async Task<IActionResult> Test(int id, string name, int length = 0)
+        public async Task<IActionResult> Test(int id, int length)
         {
             //if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
-            int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
+            //int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
             List<int> ids = await FriendInvitationRepository.SelectPartFriendInvitation(_context, id, length);
-            //if (requesterId != id || user == null) return BadRequest();
-            return Ok(await JsonUtil.SerializeAsync(ids));
+            return Ok(await JsonUtil.SerializeAsync<List<int>>(ids));
         }
 
         [HttpGet]

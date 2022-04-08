@@ -9,6 +9,7 @@ namespace ApiServer.Constants
     {
         public static readonly string token = "token";
         public static readonly string id = "id";
+        public static readonly string user_id = "user_id";
         public static readonly string secret = "secret";
         public static readonly string expires = "expires";
     }

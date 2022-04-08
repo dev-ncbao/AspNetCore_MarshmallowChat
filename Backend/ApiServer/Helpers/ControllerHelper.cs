@@ -50,6 +50,14 @@ namespace ApiServer.Helpers
                 Expires = expires,
                 HttpOnly = true
             });
+            _context.Response.Cookies.Append(CookieConstants.user_id, user.UserId.ToString(), new CookieOptions()
+            {
+                SameSite = SameSiteMode.None,
+                Domain = domain,
+                Secure = true,
+                Expires = expires,
+                HttpOnly = false
+            });
             _context.Response.Cookies.Append(CookieConstants.secret, user.Secret, new CookieOptions()
             {
                 SameSite = SameSiteMode.None,

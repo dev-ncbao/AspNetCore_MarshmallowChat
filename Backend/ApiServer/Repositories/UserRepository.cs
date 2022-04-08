@@ -24,6 +24,21 @@ namespace ApiServer.Repositories
             return user;
         }
 
+        public static async Task<CustomModels.User> SelectCustomUserAsync(MarshmallowChatContext _context, int id)
+        {
+            CustomModels.User user = await _context.Users
+                .Where(u => u.UserId == id)
+                .Select(u => new CustomModels.User() { 
+                    UserId = u.UserId,
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Avatar = u.Avatar
+                })
+                .FirstOrDefaultAsync<CustomModels.User>();
+            return user;
+        }
+
         public static async Task<User> SelectAsync(MarshmallowChatContext _context, int id, string secret)
         {
             User user = await _context.Users.Where(u => u.UserId == id && u.Secret == secret).FirstOrDefaultAsync<User>();
