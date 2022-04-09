@@ -10,9 +10,9 @@ import { ContextMenuItem, ContactCard } from './../../components'
 import { ContextMenu } from './../../features';
 import styles from './FriendAdditionContainer.module.css'
 
-function FriendAdditionContainer({ inviterId, containerRef }) {
+function FriendAdditionContainer({ strangerId, containerRef }) {
     const navigate = useNavigate()
-    const [inviter, setInviter] = useState({})
+    const [stranger, setStranger] = useState({})
     const [toggleMenu, setToggleMenu] = useState(false);
     const [contextOverflow, setContextOverflow] = useState(false);
     const contextContainerRef = useRef();
@@ -26,12 +26,12 @@ function FriendAdditionContainer({ inviterId, containerRef }) {
     ]
     useEffect(() => {
         const callback = async () => {
-            const response = await user.get(inviterId)
+            const response = await user.get(strangerId)
             if (!response) return
             if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                 navigate(routes.ROUTES.LOGIN)
             else if (response.status === https.STATUS_CODE.OK) {
-                await response.clone().json().then(data => setInviter(() => data))
+                await response.clone().json().then(data => setStranger(() => data))
             }
         }
         callback()
@@ -55,11 +55,11 @@ function FriendAdditionContainer({ inviterId, containerRef }) {
         <ContactCard>
             <div className={styles.avatar}></div>
             <div className={styles.infoContainer}>
-                <span className={clsx(styles.name, 'text-headline-3')}>{`${inviter.FirstName} ${inviter.LastName}`}</span>
-                <span className={clsx(styles.description, 'text-body-2')}>{inviter.Username}</span>
+                <span className={clsx(styles.name, 'text-headline-3')}>{`${stranger.FirstName} ${stranger.LastName}`}</span>
+                <span className={clsx(styles.description, 'text-body-2')}>{stranger.Username}</span>
             </div>
             <div id='context' className={styles.buttonContainer}>
-                <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Nhắn tin</button>
+                <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Kết bạn</button>
                 <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonRight)} onClick={handleToggleMenu}>
                     <FontAwesomeIcon icon={faEllipsis} />
                 </button>

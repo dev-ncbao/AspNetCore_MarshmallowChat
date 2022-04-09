@@ -29,14 +29,16 @@ namespace ApiServer
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        [Route("~/api/user/{id:int}/friend/invitation/{length:int?}")]
-        public async Task<IActionResult> Test(int id, int length)
+        [HttpDelete]
+        [Route("~/api/user/{id:int}/friend/invitation/{strangerId:int}")]
+        public async Task<IActionResult> Test(int id, int strangerId)
         {
             //if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
-            //int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            List<int> ids = await FriendInvitationRepository.SelectPartFriendInvitation(_context, id, length);
-            return Ok(await JsonUtil.SerializeAsync<List<int>>(ids));
+            //int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
+            //if (requestId != id || !await UserRepository.UserWasExistedAsync(_context, strangerId)) return BadRequest();
+            if (!await UserRepository.UserWasExistedAsync(_context, strangerId) || !await FriendInvitationRepository.InvitationWasExistedAsync(_context, id, strangerId)) return BadRequest();
+            if (!await FriendInvitationRepository.DeleteAsync(_context, id, strangerId)) return StatusCode(500);
+            return Ok();
         }
 
         [HttpGet]

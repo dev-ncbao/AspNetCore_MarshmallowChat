@@ -32,6 +32,7 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> Get(int id)
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            if (!await UserRepository.UserWasExistedAsync(_context, id)) return BadRequest();
             CustomModels.User user = await UserRepository.SelectCustomUserAsync(_context, id);
             return Ok(await JsonUtil.SerializeAsync<CustomModels.User>(user));
         }
@@ -59,10 +60,7 @@ namespace ApiServer.Controllers
                     }));
                 user = await UserRepository.InsertAsync(_context, user);
                 if (user == null) return StatusCode(500, await JsonUtil.SerializeAsync<object>(new { message = "Lỗi máy chủ"}));
-                user.Password = "";
-                user.Secret = "";
-                string payload = await JsonUtil.SerializeAsync<User>(user);
-                return CreatedAtRoute("", user.UserId, payload);
+                return Created("", null);
             }
             return BadRequest();
         }

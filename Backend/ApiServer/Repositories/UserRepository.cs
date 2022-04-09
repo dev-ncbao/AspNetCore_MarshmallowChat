@@ -70,5 +70,11 @@ namespace ApiServer.Repositories
             User user = await _context.Users.Where(u => u.Username == username).FirstOrDefaultAsync<User>();
             return user != null;
         }
+
+        public static async Task<bool> UserWasExistedAsync(MarshmallowChatContext _context, int id)
+        {
+            User user = await _context.Users.Where(u => u.UserId == id).FirstOrDefaultAsync();
+            return user != null;
+        }
     }
 }

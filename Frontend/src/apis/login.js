@@ -6,3 +6,5 @@ export const test = async (body) => await api('/login/test/0', https.HTTP_METHOD
 export const check = async () => await api(apis.LOGIN.CHECK, https.HTTP_METHOD.GET)
 
 export const post = async (body) => await api(apis.LOGIN.LOGIN, https.HTTP_METHOD.POST, body)
+
+export const logout = async () => await api(apis.LOGIN.LOGOUT, https.HTTP_METHOD.GET)

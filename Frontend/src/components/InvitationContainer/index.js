@@ -59,7 +59,7 @@ function InvitationContainer({ inviterId, containerRef }) {
                 <span className={clsx(styles.description, 'text-body-2')}>{inviter.Username}</span>
             </div>
             <div id='context' className={styles.buttonContainer}>
-                <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Nhắn tin</button>
+                <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Chấp nhận</button>
                 <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonRight)} onClick={handleToggleMenu}>
                     <FontAwesomeIcon icon={faEllipsis} />
                 </button>

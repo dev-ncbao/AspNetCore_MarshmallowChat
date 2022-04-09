@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 //
-import { cookie } from './../../utils'
+import { cookie, helper } from './../../utils'
 import { friend } from './../../apis'
 import { https, cookies, routes } from './../../constants'
 import { Search, FriendContainer } from './../../components';
@@ -10,8 +10,13 @@ import styles from './FriendListContent.module.css';
 function FriendListContent() {
     const navigate = useNavigate()
     const containerRef = useRef();
+    const scrollContainerRef = useRef()
+    const lastScrollTopRef = useRef(0)
+    const [triggerApi, setTriggerApi] = useState(false)
     const [friendIds, setFriendIds] = useState([])
+    const scrollListener = useCallback((e) => helper.triggerBottomed(e, lastScrollTopRef, () => setTriggerApi(prev => !prev)), [])
     useEffect(() => {
+        console.log('run')
         const callback = async () => {
             const cookieObj = cookie.cookieToObject()
             const response = await friend.get(cookieObj[cookies.USER_ID], friendIds.length)
@@ -23,13 +28,14 @@ function FriendListContent() {
             }
         }
         callback()
-    }, [])
+    }, [triggerApi])
+    useEffect(() => helper.useEffectBindEvent(scrollContainerRef, 'scroll', scrollListener), [])
     return (
         <div ref={containerRef} className={styles.container}>
             <div className={styles.searchContainer}>
                 <Search placeholder='Tìm kiếm bạn bè' />
             </div>
-            <div className={styles.friendsContainer}>
+            <div ref={scrollContainerRef} className={styles.friendsContainer}>
                 <div className={styles.friendsWrapper}>
                     {
                         friendIds.map((friendId, index) => {

@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useRef, useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 //
-import { cookie } from '../../utils'
+import { cookie, helper } from '../../utils'
 import { friend } from '../../apis'
 import { https, cookies, routes } from '../../constants'
 import { Search, InvitationContainer } from '../../components';
@@ -10,6 +10,10 @@ import styles from './FriendInvitationContent.module.css';
 function FriendInvitationContent() {
     const navigate = useNavigate()
     const containerRef = useRef();
+    const scrollContainerRef = useRef()
+    const lastScrollRef = useRef()
+    const scrollListener = useCallback((e) => helper.triggerBottomed(e, lastScrollRef, () => setTriggerApi(prev => !prev), []))
+    const [triggerApi, setTriggerApi] = useState(false)
     const [inviterIds, setInviterIds] = useState([])
     useEffect(() => {
         const callback = async () => {
@@ -23,7 +27,8 @@ function FriendInvitationContent() {
             }
         }
         callback()
-    }, [])
+    }, [triggerApi])
+    useEffect(() => helper.useEffectBindEvent(scrollContainerRef, 'scroll', scrollListener), [])
     return (
         <div ref={containerRef} className={styles.container}>
             <div className={styles.searchContainer}>
@@ -34,7 +39,7 @@ function FriendInvitationContent() {
                     {
                         inviterIds.map((inviterId, index) => {
                             return (
-                                <InvitationContainer key={index} inviterId={inviterId} containerRef={containerRef}/>
+                                <InvitationContainer key={index} inviterId={inviterId} containerRef={containerRef} />
                             )
                         })
                     }

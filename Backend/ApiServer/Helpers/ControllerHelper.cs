@@ -83,7 +83,7 @@ namespace ApiServer.Helpers
             DateTime now = DateTime.UtcNow.ToLocalTime();
             if(expiresTime.Date == now.Date && expiresTime.Hour - now.Hour <= 4)
             {
-                SetResponseCookieAsync(_context, user);
+                await SetResponseCookieAsync(_context, user);
             }
         }
     }

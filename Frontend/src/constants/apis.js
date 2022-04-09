@@ -15,5 +15,6 @@ export const USER = {
 export const FRIEND = {
     FRIEND_POST: (userId, friendId) => `${userPrefix}/${userId}${friendPrefix}/${friendId}`,
     FRIEND_GET: (userId, length) => `${userPrefix}/${userId}${friendPrefix}/${length}`,
-    INVITATION: (userId, length) => `${userPrefix}/${userId}${friendPrefix}/invitation/${length}`
+    INVITATION: (userId, length) => `${userPrefix}/${userId}${friendPrefix}/invitation/${length}`,
+    SUGGESTION: (userId, length) => `${userPrefix}/${userId}${friendPrefix}/suggestion/${length}`
 }

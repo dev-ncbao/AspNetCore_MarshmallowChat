@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faBell, faComment, faUserGroup, faArrowRightFromBracket, faKey } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 //
+import { login } from './../../apis'
+import { https } from './../../constants'
 import { Navigation, ContextMenu } from './../../features'
 import { ButtonCircular, ContextMenuItem } from '../../components'
 import { routes } from './../../constants'
 import Logo from './../../assets/img/Logo.png'
 import styles from './Header.module.css'
-//
-import { login } from './../../apis'
 
 function Header() {
     const [toggleMenu, setToggleMenu] = useState(false)
@@ -40,8 +40,11 @@ function Header() {
             name: 'Đăng xuất',
             description: '',
             icon: faArrowRightFromBracket,
-            onClick: () => {
-                navigate(routes.ROUTES.LOGIN)
+            onClick: async () => {
+                const response = await login.logout()
+                if(!response) return
+                if(response.status === https.STATUS_CODE.UNAUTHORIZED || response.status === https.STATUS_CODE.OK) 
+                    navigate(routes.ROUTES.LOGIN)
             }
         }
     ]
