@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static ApiServer.Constants.ModelConstants;
 
 #nullable disable
 
@@ -14,7 +15,7 @@ namespace ApiServer.Models
         }
 
         public int RoomId { get; set; }
-        public string Type { get; set; }
+        public RoomType Type { get; set; }
 
         public virtual RoomInfo RoomInfo { get; set; }
         public virtual ICollection<Message> Messages { get; set; }

@@ -6,7 +6,7 @@ export const ALLOW_ANONYMOUS = [
 
 export const ROUTES = {
     HOME: '/',
-    CHAT: '/chat',
+    CHAT: (roomId) => roomId ? `/chat/${roomId}` : '/chat',
     CONTACT: '/contact',
     RESET_PASSWORD: '/reset-password',
     REGISTER: '/register',

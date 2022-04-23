@@ -20,3 +20,7 @@ export const useEffectBindEvent = (elementRef, type, callback, option = false) =
             elementRef.current.removeEventListener(type, callback, option)
     }
 }
+
+export const combinePath = (...routes) =>{
+    return '/' + routes.reduce((prev, cur) => `${prev}/${cur}`)
+}

@@ -11,6 +11,8 @@ using ApiServer.Helpers;
 using ApiServer.Constants;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using ApiServer.Controllers;
+using ApiServer.CustomModels;
 
 namespace ApiServer
 {
@@ -21,25 +23,22 @@ namespace ApiServer
     {
         private readonly ILogger<LoginController> _logger;
         private readonly MarshmallowChatContext _context;
+        //private readonly IServiceProvider _provider;
 
-        public LoginController(ILogger<LoginController> logger, MarshmallowChatContext context)
+        public LoginController(ILogger<LoginController> logger, MarshmallowChatContext context, IServiceProvider provider)
         {
             _logger = logger;
             _context = context;
+            //_provider = provider;
         }
 
-        [AllowAnonymous]
-        [HttpDelete]
-        [Route("~/api/user/{id:int}/friend/invitation/{strangerId:int}")]
-        public async Task<IActionResult> Test(int id, int strangerId)
+        /*[AllowAnonymous]
+        [HttpGet]
+        [Route("~/api/user/{id:int}/room/{roomId:int}/message")]
+        public async Task<IActionResult> Test(int id, int roomId)
         {
-            //if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
-            //int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            //if (requestId != id || !await UserRepository.UserWasExistedAsync(_context, strangerId)) return BadRequest();
-            if (!await UserRepository.UserWasExistedAsync(_context, strangerId) || !await FriendInvitationRepository.InvitationWasExistedAsync(_context, id, strangerId)) return BadRequest();
-            if (!await FriendInvitationRepository.DeleteAsync(_context, id, strangerId)) return StatusCode(500);
-            return Ok();
-        }
+            return Ok(await JsonUtil.SerializeAsync<List<MessageModel>>(await MessageRepository.SelectMessage(_context, roomId, 0)));
+        }*/
 
         [HttpGet]
         [Route("~/api/logout")]

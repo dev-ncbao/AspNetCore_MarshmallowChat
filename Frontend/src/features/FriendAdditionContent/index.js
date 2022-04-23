@@ -32,7 +32,7 @@ function FriendAdditionContent() {
     return (
         <div ref={containerRef} className={styles.container}>
             <div className={styles.searchContainer}>
-                <Search placeholder='Tìm kiếm bạn bè' />
+                <Search placeholder='Tìm kiếm với tên đầy đủ, tên tài khoản hoặc email' />
             </div>
             <div ref={scrollContainerRef} className={styles.friendsContainer}>
                 <div className={styles.friendsWrapper}>

@@ -21,3 +21,5 @@ export default api;
 export * as login from './login';
 export * as user from './user';
 export * as friend from './friend'
+export * as room from './room'
+export * as message from './message'

@@ -1,10 +1,16 @@
 import clsx from "clsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightFromBracket, faBell, faChevronDown, faCircleInfo, faFaceSmile, faImage, faPaperclip, faPaperPlane, faPencil } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { faArrowRightFromBracket, faBell, faChevronDown, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from 'react-router-dom'
 //
+import { room } from './../../apis'
+import { cookies, https } from './../../constants'
+import { cookie } from './../../utils'
 import { Layout, LayoutLeft, LayoutCenter, LayoutRight } from "../../containers";
-import { Search, ChatItem, OtherMessage, YourMessage, ChatSettingItem, NavRounded } from './../../components';
+import { ChatPanel } from './../../features'
+import { Search, ChatItem, ChatSettingItem, NavRounded } from './../../components';
+import { rooms as roomsCst, routes } from './../../constants'
 import styles from './Chat.module.css';
 import { faImages } from "@fortawesome/free-regular-svg-icons";
 
@@ -28,99 +34,28 @@ const settingItems = [
 ]
 
 function Chat() {
-    const [messageList, setMessageList] = useState([
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        },
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        },
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        },
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        },
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        },
-        {
-            own: 'you',
-            message: 'Bạn có khỏe không, lâu rồi mình không gặp nhau, Bạn có khỏe không, lâu rồi mình không gặp nhau, Bạn có khỏe không, lâu rồi mình không gặp nhau'
-        },
-        {
-            own: 'other',
-            name: 'Nguyễn Chí Bảo',
-            message: 'Tôi khỏe lắm, hôm nào đi cafe nhé'
-        },
-        {
-            own: 'you',
-            message: 'Ok luôn bạn ơi :))'
-        }
-    ]);
-    const sendMessage = (message) => {
-        const sendData = {
-            own: 'you',
-            message
-        };
-        setMessageList([...messageList, sendData]);
+    const navigate = useNavigate()
+    const {id} = useParams()
+    const idParam = parseInt(id)
+    const [roomIds, setRoomIds] = useState([])
+    
+    const handleChangeRoom = (roomId) => {
+        navigate(routes.ROUTES.CHAT(roomId))
     }
 
-    const handlePressEnter = (e) => {
-        if (e.which === 13) {
-            sendMessage(e.target.innerText);
+    useEffect(() => {
+        const callback = async () => {
+            const cookieObj = cookie.cookieToObject()
+            const response = await room.get_list(cookieObj[cookies.USER_ID], JSON.stringify(roomIds))
+            if(response.status === https.STATUS_CODE.UNAUTHORIZED) navigate(routes.ROUTES.LOGIN)
+            else if( response.status === https.STATUS_CODE.OK){
+                await response.json().then(data => {
+                    setRoomIds(prev => [...prev, ...data])
+                })
+            }
         }
-    }
+        callback()
+    },[])
 
     return (
         <Layout>
@@ -130,96 +65,16 @@ function Chat() {
                         <Search placeholder='Tìm kiếm đoạn chat' />
                     </div>
                     <div className={styles.chatsContainer}>
-                        <ChatItem active={true} />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
-                        <ChatItem />
+                        {
+                            roomIds.map((roomId) => (
+                                <ChatItem key={roomId} active={roomId === idParam} roomId={roomId} onClick={handleChangeRoom}/>
+                            ))
+                        }
                     </div>
                 </div>
             </LayoutLeft>
             <LayoutCenter>
-                <div className={clsx('d-flex', 'flex-col', styles.centerContainer)}>
-                    <div className={styles.infoContainer}>
-                        <div className={clsx(styles.infoWrapper, 'd-flex', 'align-center')}>
-                            <div className={clsx(styles.chatInfo, 'd-flex')}>
-                                <div className={styles.avatar}></div>
-                                <div className={clsx('d-flex', 'flex-col')}>
-                                    <span className={clsx('text-headline-3', styles.name)}>Nguyễn Chí Bảo</span>
-                                    <span className={clsx('text-body-4', styles.accessState)}>Đang hoạt động</span>
-                                </div>
-                            </div>
-                            <div className={clsx(styles.menuContainer, 'd-flex')}>
-                                <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnDetailInfo)}>
-                                    <FontAwesomeIcon icon={faCircleInfo} />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={clsx(styles.messagesContainer)}>
-                        <div className={clsx(styles.messagesWrapper, 'd-flex', 'flex-col')}>
-                            {
-                                messageList.map((message, index) => {
-                                    if (message.own === 'you') {
-                                        return (
-                                            <div key={index} className={styles.messageRow}>
-                                                <YourMessage
-                                                    messageContent={message.message}
-                                                />
-                                            </div>
-                                        );
-                                    }
-                                    else return (
-                                        <div key={index} className={styles.messageRow}>
-                                            <OtherMessage
-                                                senderName={message.name}
-                                                messageContent={message.message}
-                                            />
-                                        </div>
-                                    );
-                                })
-                            }
-                        </div>
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <div className={clsx(styles.inputWrapper, 'd-flex')}>
-                            <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnDetachFiles)}>
-                                <FontAwesomeIcon icon={faPaperclip} />
-                            </button>
-                            <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnUploadImages)}>
-                                <FontAwesomeIcon icon={faImage} />
-                            </button>
-                            <div className={clsx(styles.inputMessageContainer, 'd-flex', 'align-center')}>
-                                <div className={styles.inputMessageWrapper}>
-                                    <div
-                                        suppressContentEditableWarning={true}
-                                        contentEditable={true}
-                                        className={clsx(styles.inputMessage, styles.inputMessagePlaceholder, 'text-body-2')}
-                                        placeholder='Nhập tin nhắn của bạn vào đây'
-                                        id="input-message"
-                                        onKeyPress={handlePressEnter}
-                                    >Nhập tin nhắn của bạn vào đây</div>
-                                </div>
-                            </div>
-                            <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnAddEmoji)}>
-                                <FontAwesomeIcon icon={faFaceSmile} />
-                            </button>
-                            <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnSendMessage)}>
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ChatPanel roomId={idParam}/>
             </LayoutCenter>
             <LayoutRight>
                 <div className={clsx(styles.rightContainer, 'd-flex', 'flex-col')}>

@@ -105,8 +105,7 @@ namespace ApiServer.Models
                 entity.ToTable("Room");
 
                 entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                    .IsRequired();
             });
 
             modelBuilder.Entity<RoomInfo>(entity =>

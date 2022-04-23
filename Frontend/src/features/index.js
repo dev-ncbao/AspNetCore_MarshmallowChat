@@ -6,3 +6,4 @@ export { default as FriendAdditionContent } from './FriendAdditionContent';
 export { default as FriendInvitationContent } from './FriendInvitationContent';
 export { default as GroupListContent } from './GroupListContent';
 export { default as GroupAddContent } from './GroupAddContent';
+export { default as ChatPanel } from './ChatPanel';

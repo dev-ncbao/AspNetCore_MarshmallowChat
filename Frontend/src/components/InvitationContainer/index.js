@@ -1,11 +1,12 @@
-import { faEllipsis, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser, faEllipsis, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx'
 import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 //
-import { https, routes } from './../../constants'
-import { user } from './../../apis'
+import { cookie } from './../../utils'
+import { https, routes, cookies, users } from './../../constants'
+import { user, friend } from './../../apis'
 import { ContextMenuItem, ContactCard } from './../../components'
 import { ContextMenu } from './../../features';
 import styles from './InvitationContainer.module.css'
@@ -13,13 +14,14 @@ import styles from './InvitationContainer.module.css'
 function InvitationContainer({ inviterId, containerRef }) {
     const navigate = useNavigate()
     const [inviter, setInviter] = useState({})
+    const [isAccept, setIsAccept] = useState(false)
     const [toggleMenu, setToggleMenu] = useState(false);
     const [contextOverflow, setContextOverflow] = useState(false);
     const contextContainerRef = useRef();
     const contextMenuItems = [
         {
-            name: 'Xóa kết bạn',
-            icon: <FontAwesomeIcon icon={faUserMinus} />,
+            name: 'Trang cá nhân',
+            icon: <FontAwesomeIcon icon={faCircleUser} />,
             description: '',
             onClick: null
         }
@@ -40,15 +42,21 @@ function InvitationContainer({ inviterId, containerRef }) {
         if (toggleMenu && containerRef.current && contextContainerRef.current) {
             const container = containerRef.current.getBoundingClientRect()
             const contextContainer = contextContainerRef.current.getBoundingClientRect()
-            if(container.right < contextContainer.right && contextOverflow === false) setContextOverflow(true)
-            else if(contextContainer.left < container.left && contextOverflow === true) setContextOverflow(false)
-        } 
+            if (container.right < contextContainer.right && contextOverflow === false) setContextOverflow(true)
+            else if (contextContainer.left < container.left && contextOverflow === true) setContextOverflow(false)
+        }
     }, [toggleMenu])
     const handleToggleMenu = () => {
         setToggleMenu(prev => !prev);
     }
-    const handleGoToChat = () => {
-
+    const handleAccept = async () => {
+        const cookieObj = cookie.cookieToObject()
+        const response = await friend.friendPost(cookieObj[cookies.USER_ID], inviter[users.USER_ID])
+        if (!response) return
+        if (response.status === https.STATUS_CODE.UNAUTHORIZED)
+            navigate(routes.ROUTES.LOGIN)
+        else if(response.status === https.STATUS_CODE.CREATED)
+            setIsAccept(() => true)
     }
 
     return (
@@ -59,7 +67,13 @@ function InvitationContainer({ inviterId, containerRef }) {
                 <span className={clsx(styles.description, 'text-body-2')}>{inviter.Username}</span>
             </div>
             <div id='context' className={styles.buttonContainer}>
-                <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleGoToChat}>Chấp nhận</button>
+                {!isAccept
+                    && (
+                        <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonLeft)} onClick={handleAccept}>Chấp nhận</button>
+                    )
+                    || (
+                        <span>Đã chấp nhận</span>
+                    )}
                 <button className={clsx('clear-button-tag', 'text-body-2', styles.buttonRight)} onClick={handleToggleMenu}>
                     <FontAwesomeIcon icon={faEllipsis} />
                 </button>

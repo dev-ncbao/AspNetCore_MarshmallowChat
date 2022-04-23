@@ -18,7 +18,7 @@ function Header() {
     const navigationItems = [
         {
             name: 'Nhắn tin',
-            path: routes.ROUTES.CHAT,
+            path: routes.ROUTES.CHAT(),
             icon: <FontAwesomeIcon icon={faComment} />
         },
         {

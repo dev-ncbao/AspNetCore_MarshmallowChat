@@ -16,10 +16,9 @@ function FriendListContent() {
     const [friendIds, setFriendIds] = useState([])
     const scrollListener = useCallback((e) => helper.triggerBottomed(e, lastScrollTopRef, () => setTriggerApi(prev => !prev)), [])
     useEffect(() => {
-        console.log('run')
         const callback = async () => {
             const cookieObj = cookie.cookieToObject()
-            const response = await friend.get(cookieObj[cookies.USER_ID], friendIds.length)
+            const response = await friend.friendGet(cookieObj[cookies.USER_ID], friendIds.length)
             if (!response) return
             if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                 navigate(routes.ROUTES.LOGIN)
@@ -33,7 +32,7 @@ function FriendListContent() {
     return (
         <div ref={containerRef} className={styles.container}>
             <div className={styles.searchContainer}>
-                <Search placeholder='Tìm kiếm bạn bè' />
+                <Search placeholder='Tìm kiếm trong danh sách bạn bè' />
             </div>
             <div ref={scrollContainerRef} className={styles.friendsContainer}>
                 <div className={styles.friendsWrapper}>

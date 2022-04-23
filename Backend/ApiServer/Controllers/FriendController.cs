@@ -31,7 +31,7 @@ namespace ApiServer.Controllers
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
             if (length < 0 || id != requesterId) return BadRequest();
-            List<int> ids = await FriendshipRepository.SelectPartSuggestionFriend(_context, id, length);
+            List<int> ids = await FriendshipRepository.SelectSuggestionPart(_context, id, length);
             return Ok(await JsonUtil.SerializeAsync(ids));
         }
         //
@@ -42,7 +42,7 @@ namespace ApiServer.Controllers
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
             if (length < 0 || id != requesterId) return BadRequest();
-            List<int> ids = await FriendInvitationRepository.SelectPartFriendInvitation(_context, id, length);
+            List<int> ids = await FriendInvitationRepository.SelectPartAsync(_context, id, length);
             return Ok(await JsonUtil.SerializeAsync(ids));
         }
 
@@ -52,8 +52,8 @@ namespace ApiServer.Controllers
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            if (requestId != id || !await UserRepository.UserWasExistedAsync(_context, strangerId)) return BadRequest();
-            if (await FriendshipRepository.FriendWasExistedAsync(_context, id, strangerId) || await FriendInvitationRepository.InvitationWasExistedAsync(_context, id, strangerId)) return Conflict();
+            if (requestId != id || !await UserRepository.UserExistsAsync(_context, strangerId)) return BadRequest();
+            if (await FriendshipRepository.ExistsAsync(_context, id, strangerId) || await FriendInvitationRepository.ExistsAsync(_context, id, strangerId)) return Conflict();
             FriendInvitation invitation = new FriendInvitation()
             {
                 From = id,
@@ -67,11 +67,11 @@ namespace ApiServer.Controllers
 
         [HttpDelete]
         [Route("~/api/user/{id:int}/friend/invitation/{strangerId:int}")]
-        public async Task<IActionResult> Test(int id, int strangerId)
+        public async Task<IActionResult> DeleteInvitation(int id, int strangerId)
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            if (requestId != id || !await UserRepository.UserWasExistedAsync(_context, strangerId) || !await FriendInvitationRepository.InvitationWasExistedAsync(_context, id, strangerId)) return BadRequest();
+            if (requestId != id || !await UserRepository.UserExistsAsync(_context, strangerId) || !await FriendInvitationRepository.ExistsAsync(_context, id, strangerId)) return BadRequest();
             if (!await FriendInvitationRepository.DeleteAsync(_context, id, strangerId)) return StatusCode(500);
             return Ok();
         }
@@ -83,7 +83,7 @@ namespace ApiServer.Controllers
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
             if (length < 0 || id != requesterId) return BadRequest();
-            List<int> ids = await FriendshipRepository.SelectPartFriend(_context, id, length);
+            List<int> ids = await FriendshipRepository.SelectPart(_context, id, length);
             return Ok(await JsonUtil.SerializeAsync(ids));
         }
 
@@ -93,13 +93,18 @@ namespace ApiServer.Controllers
         [Route("~/api/user/{id:int}/friend/{friendId:int}")]
         public async Task<IActionResult> AddFriend(int id, int friendId)
         {
-            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) 
+                return Unauthorized();
             int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            if (requesterId != id || !await UserRepository.UserWasExistedAsync(_context, friendId) || await FriendshipRepository.FriendWasExistedAsync(_context, id, friendId)) return BadRequest();
-            if (await FriendshipRepository.FriendWasExistedAsync(_context, id, friendId)) return Conflict();
+            if (requesterId != id || !await UserRepository.UserExistsAsync(_context, friendId)) 
+                return BadRequest();
+            if (await FriendshipRepository.ExistsAsync(_context, id, friendId) || await RoomRepository.ExistsAsync(_context, id, friendId)) 
+                return Conflict();
             Friendship friendship = await FriendshipRepository.InsertAsync(_context, id, friendId);
-            if (friendship == null) return StatusCode(500);
-            return Created("", null);
+            int? roomId = await RoomRepository.InsertAsync(_context, id, friendId);
+            if (friendship == null || !await FriendInvitationRepository.DeleteAsync(_context, id, friendId) || !roomId.HasValue)
+                return StatusCode(500);
+            return Created("", await JsonUtil.SerializeAsync(roomId.Value));
         }
 
         [HttpDelete]
@@ -108,7 +113,7 @@ namespace ApiServer.Controllers
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requesterId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
-            if (requesterId != id || !await UserRepository.UserWasExistedAsync(_context, friendId) || !await FriendshipRepository.FriendWasExistedAsync(_context, id, friendId)) return BadRequest();
+            if (requesterId != id || !await UserRepository.UserExistsAsync(_context, friendId) || !await FriendshipRepository.ExistsAsync(_context, id, friendId)) return BadRequest();
             if (!await FriendshipRepository.DeleteAsync(_context, id, friendId)) return StatusCode(500);
             return Ok();
         }

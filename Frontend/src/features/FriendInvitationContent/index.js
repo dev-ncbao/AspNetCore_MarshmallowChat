@@ -18,7 +18,7 @@ function FriendInvitationContent() {
     useEffect(() => {
         const callback = async () => {
             const cookieObj = cookie.cookieToObject()
-            const response = await friend.inviation(cookieObj[cookies.USER_ID], inviterIds.length)
+            const response = await friend.inviationGet(cookieObj[cookies.USER_ID], inviterIds.length)
             if (!response) return
             if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                 navigate(routes.ROUTES.LOGIN)

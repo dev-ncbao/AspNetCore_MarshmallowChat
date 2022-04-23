@@ -32,9 +32,9 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> Get(int id)
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
-            if (!await UserRepository.UserWasExistedAsync(_context, id)) return BadRequest();
-            CustomModels.User user = await UserRepository.SelectCustomUserAsync(_context, id);
-            return Ok(await JsonUtil.SerializeAsync<CustomModels.User>(user));
+            if (!await UserRepository.UserExistsAsync(_context, id)) return BadRequest();
+            CustomModels.UserModel user = await UserRepository.SelectShortInfoAsync(_context, id);
+            return Ok(await JsonUtil.SerializeAsync<CustomModels.UserModel>(user));
         }
 
         [HttpPost]
@@ -48,12 +48,12 @@ namespace ApiServer.Controllers
             {
                 user.Password = await EncryptionUtil.SHA256HashAsync(user.Password);
                 user.Secret = await EncryptionUtil.SHA256HashAsync(user.Username + user.Password + user.UserId);
-                if (await UserRepository.UsernameWasExistedAsync(_context, user.Username))
+                if (await UserRepository.UsernameExistsAsync(_context, user.Username))
                     return Conflict(await JsonUtil.SerializeAsync<object>(new
                     {
                         message = "Tên người dùng đã được sử dụng"
                     }));
-                if (await UserRepository.EmailWasExistedAsync(_context, user.Email))
+                if (await UserRepository.EmailExistsAsync(_context, user.Email))
                     return Conflict(await JsonUtil.SerializeAsync<object>(new
                     {
                         message = "Email đã được sử dụng"

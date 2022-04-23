@@ -11,15 +11,15 @@ namespace ApiServer.Repositories
 {
     public static class FriendInvitationRepository
     {
-        public static async Task<List<int>> SelectPartFriendInvitation(MarshmallowChatContext _context, int id, int length)
+        public static async Task<List<int>> SelectPartAsync(MarshmallowChatContext _context, int userId, int length)
         {
-            List<int> ids = await _context.FriendInvitations.Where(f => f.To == id).Select(f => f.From).Skip(length).Take(ModelConstants.takeLength).ToListAsync();
+            List<int> ids = await _context.FriendInvitations.Where(f => f.To == userId).Select(f => f.From).Skip(length).Take(ModelConstants.takeLength).ToListAsync();
             return ids;
         }
 
-        public static async Task<FriendInvitation> SelectAsync(MarshmallowChatContext _context, int id, int strangerId)
+        public static async Task<FriendInvitation> SelectAsync(MarshmallowChatContext _context, int userId, int strangerId)
         {
-            FriendInvitation invitation = await _context.FriendInvitations.Where(f => f.From == id && f.To == strangerId || f.To == id && f.From == strangerId).FirstOrDefaultAsync();
+            FriendInvitation invitation = await _context.FriendInvitations.Where(f => f.From == userId && f.To == strangerId || f.To == userId && f.From == strangerId).FirstOrDefaultAsync();
             return invitation;
         }
 
@@ -31,18 +31,24 @@ namespace ApiServer.Repositories
             return null;
         }
 
-        public static async Task<bool> DeleteAsync(MarshmallowChatContext _context, int id, int strangerId)
+        public static async Task<bool> DeleteAsync(MarshmallowChatContext _context, int userId, int strangerId)
         {
-            FriendInvitation invitation = await SelectAsync(_context, id, strangerId);
+            FriendInvitation invitation = await SelectAsync(_context, userId, strangerId);
             EntityEntry entry = _context.FriendInvitations.Remove(invitation);
             await _context.SaveChangesAsync();
             if (entry.State == EntityState.Detached) return true;
             return false;
         }
 
-        public static async Task<bool> InvitationWasExistedAsync(MarshmallowChatContext _context, int id, int strangerId)
+        public static async Task<bool> ExistsAsync(MarshmallowChatContext _context, int userId, int strangerId)
         {
-            FriendInvitation invitation = await _context.FriendInvitations.Where(f => f.From == id && f.To == strangerId || f.From == strangerId && f.To == id).FirstOrDefaultAsync();
+            FriendInvitation invitation = await _context.FriendInvitations.Where(f => f.From == userId && f.To == strangerId || f.From == strangerId && f.To == userId).FirstOrDefaultAsync();
+            return invitation != null;
+        }
+
+        public static bool Exists(MarshmallowChatContext _context, int userId, int strangerId)
+        {
+            FriendInvitation invitation = _context.FriendInvitations.Where(f => f.From == userId && f.To == strangerId || f.From == strangerId && f.To == userId).FirstOrDefault();
             return invitation != null;
         }
     }

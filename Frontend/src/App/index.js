@@ -6,7 +6,13 @@ import { Chat, Contact, Home, Login, ResetPassword, Register } from './../pages'
 import { FriendMenu } from './../features';
 import './style.css';
 
-//const socket = io('localhost:3443');
+const socket = io('https://localhost:3443', {
+	withCredentials: true,
+	extraHeaders: {
+		'Content-type': 'application/json',
+		Accept: 'application/json'
+	}
+});
 
 function Container() {
 	return (
@@ -14,6 +20,7 @@ function Container() {
 			<Routes>
 				<Route path='/' element={<Home />}>
 					<Route path='chat' element={<Chat />} />
+					<Route path='chat/:id' element={<Chat />} />
 					<Route path='contact' element={<ContactProvider><Contact /></ContactProvider>} />
 				</Route>
 				<Route path='login' element={<Login />} />

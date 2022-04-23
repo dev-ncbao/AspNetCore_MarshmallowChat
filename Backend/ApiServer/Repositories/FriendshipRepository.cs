@@ -11,21 +11,27 @@ namespace ApiServer.Repositories
 {
     public static class FriendshipRepository
     {
-        public static async Task<List<int>> SelectPartSuggestionFriend(MarshmallowChatContext _context, int id, int length)
+        public static async Task<List<int>> SelectSuggestionPart(MarshmallowChatContext _context, int userId, int length)
         {
-            List<int> ids = await _context.Users.Where(u => u.UserId != id)
+            List<int> ids = await _context.Users.Where(u => u.UserId != userId)
                 .Skip(length)
                 .Take(ModelConstants.takeLength)
                 .Select(u => u.UserId)
                 .ToListAsync<int>();
-            return ids;
+            var copyIds = ids.ToList();
+            ids.ForEach(eachId =>
+            {
+                if (Exists(_context, userId, eachId) || FriendInvitationRepository.Exists(_context, userId, eachId))
+                    copyIds.Remove(eachId);
+            });
+            return copyIds;
         }
-        public static async Task<List<int>> SelectPartFindingFriend(MarshmallowChatContext _context, int id, string name, int length)
+        public static async Task<List<int>> SelectFindPart(MarshmallowChatContext _context, int userId, string name, int length)
         {
-            List<int> ids = await _context.Friendships.Where(f1 => f1.User1Id == id)
+            List<int> ids = await _context.Friendships.Where(f1 => f1.User1Id == userId)
                 .Select(f1 => f1.User2Id)
                 .Union(
-                    _context.Friendships.Where(f2 => f2.User2Id == id)
+                    _context.Friendships.Where(f2 => f2.User2Id == userId)
                         .Select(f2 => f2.User1Id)
                 )
                 .Distinct()
@@ -39,12 +45,12 @@ namespace ApiServer.Repositories
             return ids;
         }
 
-        public static async Task<List<int>> SelectPartFriend(MarshmallowChatContext _context, int id, int length)
+        public static async Task<List<int>> SelectPart(MarshmallowChatContext _context, int userId, int length)
         {
-            List<int> ids = await _context.Friendships.Where(f1 => f1.User1Id == id)
+            List<int> ids = await _context.Friendships.Where(f1 => f1.User1Id == userId)
                 .Select(f1 => f1.User2Id)
                 .Union(
-                    _context.Friendships.Where(f2 => f2.User2Id == id)
+                    _context.Friendships.Where(f2 => f2.User2Id == userId)
                         .Select(f2 => f2.User1Id)
                 )
                 .Distinct()
@@ -55,17 +61,17 @@ namespace ApiServer.Repositories
             return ids;
         }
 
-        public static async Task<Friendship> SelectAsync(MarshmallowChatContext _context, int id, int friendId)
+        public static async Task<Friendship> SelectAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
-            Friendship friendship = await _context.Friendships.Where(f => f.User1Id == id && f.User2Id == friendId || f.User2Id == id && f.User1Id == friendId).FirstOrDefaultAsync();
+            Friendship friendship = await _context.Friendships.Where(f => f.User1Id == userId && f.User2Id == friendId || f.User2Id == userId && f.User1Id == friendId).FirstOrDefaultAsync();
             return friendship;
         }
 
-        public static async Task<Friendship> InsertAsync(MarshmallowChatContext _context, int id, int friendId)
+        public static async Task<Friendship> InsertAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
             DateTime now = DateTime.UtcNow.ToLocalTime();
             Friendship friendship = new Friendship() {
-                User1Id = id,
+                User1Id = userId,
                 User2Id = friendId,
                 DateCreated = now
             };
@@ -75,18 +81,24 @@ namespace ApiServer.Repositories
             return null;
         }
 
-        public static async Task<bool> DeleteAsync(MarshmallowChatContext _context, int id, int friendId)
+        public static async Task<bool> DeleteAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
-            Friendship friendship = await SelectAsync(_context, id, friendId);
+            Friendship friendship = await SelectAsync(_context, userId, friendId);
             EntityEntry entry = _context.Friendships.Remove(friendship);
             await _context.SaveChangesAsync();
             if (entry.State == EntityState.Detached) return true;
             return false;
         }
 
-        public static async Task<bool> FriendWasExistedAsync(MarshmallowChatContext _context, int id, int friendId)
+        public static async Task<bool> ExistsAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
-            Friendship friendship = await _context.Friendships.Where(f => f.User1Id == id && f.User2Id == friendId || f.User2Id == id && f.User1Id == friendId).FirstOrDefaultAsync();
+            Friendship friendship = await _context.Friendships.Where(f => f.User1Id == userId && f.User2Id == friendId || f.User2Id == userId && f.User1Id == friendId).FirstOrDefaultAsync();
+            return friendship != null;
+        }
+
+        public static bool Exists(MarshmallowChatContext _context, int userId, int friendId)
+        {
+            Friendship friendship = _context.Friendships.Where(f => f.User1Id == userId && f.User2Id == friendId || f.User2Id == userId && f.User1Id == friendId).FirstOrDefault();
             return friendship != null;
         }
     }

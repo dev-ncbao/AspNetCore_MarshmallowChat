@@ -4,9 +4,10 @@
     flex-direction: column;
 }
 
-.icon {
-    width: 20px;
-    height: 20px;
+.icon svg{
+    max-width: 20px;
+    font-size: 20px;
+    text-align: right;
     color: var(--text-dark-2);
 }
 

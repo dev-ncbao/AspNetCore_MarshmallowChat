@@ -7,41 +7,48 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ApiServer.CustomModels;
 
 namespace ApiServer.Repositories
 {
     public static class UserRepository
     {
-        public static async Task<User> SelectAsync(MarshmallowChatContext _context, string username, string password)
+        public static async Task<UserModel> SelectShortInfoAsync(MarshmallowChatContext _context, int userId)
         {
-            User user = await _context.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefaultAsync<User>();
-            return user;
-        }
-
-        public static async Task<User> SelectAsync(MarshmallowChatContext _context, int id)
-        {
-            User user = await _context.Users.Where(u => u.UserId == id).FirstOrDefaultAsync<User>();
-            return user;
-        }
-
-        public static async Task<CustomModels.User> SelectCustomUserAsync(MarshmallowChatContext _context, int id)
-        {
-            CustomModels.User user = await _context.Users
-                .Where(u => u.UserId == id)
-                .Select(u => new CustomModels.User() { 
+            UserModel user = await _context.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => new UserModel()
+                {
                     UserId = u.UserId,
                     Username = u.Username,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Avatar = u.Avatar
                 })
-                .FirstOrDefaultAsync<CustomModels.User>();
+                .FirstOrDefaultAsync<UserModel>();
             return user;
         }
 
-        public static async Task<User> SelectAsync(MarshmallowChatContext _context, int id, string secret)
+        /*public static async Task<string> SelectFullName(MarshmallowChatContext _context, int userId)
         {
-            User user = await _context.Users.Where(u => u.UserId == id && u.Secret == secret).FirstOrDefaultAsync<User>();
+            
+        }*/
+
+        public static async Task<User> SelectAsync(MarshmallowChatContext _context, string username, string password)
+        {
+            User user = await _context.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefaultAsync<User>();
+            return user;
+        }
+
+        public static async Task<User> SelectAsync(MarshmallowChatContext _context, int userId)
+        {
+            User user = await _context.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync<User>();
+            return user;
+        }
+
+        public static async Task<User> SelectAsync(MarshmallowChatContext _context, int userId, string secret)
+        {
+            User user = await _context.Users.Where(u => u.UserId == userId && u.Secret == secret).FirstOrDefaultAsync<User>();
             return user;
         }
 
@@ -59,21 +66,21 @@ namespace ApiServer.Repositories
             return null;
         }
 
-        public static async Task<bool> EmailWasExistedAsync(MarshmallowChatContext _context, string email)
+        public static async Task<bool> EmailExistsAsync(MarshmallowChatContext _context, string email)
         {
             User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync<User>();
             return user != null;
         }
 
-        public static async Task<bool> UsernameWasExistedAsync(MarshmallowChatContext _context, string username)
+        public static async Task<bool> UsernameExistsAsync(MarshmallowChatContext _context, string username)
         {
             User user = await _context.Users.Where(u => u.Username == username).FirstOrDefaultAsync<User>();
             return user != null;
         }
 
-        public static async Task<bool> UserWasExistedAsync(MarshmallowChatContext _context, int id)
+        public static async Task<bool> UserExistsAsync(MarshmallowChatContext _context, int userId)
         {
-            User user = await _context.Users.Where(u => u.UserId == id).FirstOrDefaultAsync();
+            User user = await _context.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
             return user != null;
         }
     }

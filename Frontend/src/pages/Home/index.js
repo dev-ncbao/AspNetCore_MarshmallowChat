@@ -20,11 +20,11 @@ function Home() {
                 if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                     navigate(routes.ROUTES.LOGIN);
                 else if (response.status === https.STATUS_CODE.OK && location.pathname === routes.ROUTES.HOME)
-                    navigate(routes.ROUTES.CHAT);
+                    navigate(routes.ROUTES.CHAT());
             }
         }
         callback();
-    }, [location.pathname]);
+    }, []);
 
     return (
         <AppContainer>
