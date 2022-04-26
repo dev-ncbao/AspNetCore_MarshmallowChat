@@ -4,4 +4,4 @@ export * as routes from './routes';
 export * as apis from './apis';
 export * as users from './users'
 export * as rooms from './rooms'
-export * as message from './message'
+export * as messages from './messages'

@@ -26,7 +26,7 @@ namespace ApiServer.Controllers
         }
 
         [HttpGet]
-        [Route("~/api/user/{id:int}/room/{roomId:int}/message/{length:int}")]
+        [Route("~/api/user/{id:int}/room/{roomId:int}/message/{length:int?}")]
         public async Task<IActionResult> GetMessage(int id, int roomId, int length = 0)
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext))

@@ -25,7 +25,7 @@ namespace ApiServer.Repositories
                     LastName = u.LastName,
                     Avatar = u.Avatar
                 })
-                .FirstOrDefaultAsync<UserModel>();
+                .FirstOrDefaultAsync();
             return user;
         }
 

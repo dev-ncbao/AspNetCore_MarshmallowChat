@@ -6,3 +6,4 @@ export const get = (userId, roomId) => api(apis.ROOM.ROOM_GET(userId, roomId), h
 
 export const get_list = (userId, body) => api(apis.ROOM.ROOM_LIST_GET(userId), https.HTTP_METHOD.POST, body)
 
+export const get_members = (userId, roomId) => api(apis.ROOM.ROOM_GET_MEMBER(userId, roomId, https.HTTP_METHOD.GET))

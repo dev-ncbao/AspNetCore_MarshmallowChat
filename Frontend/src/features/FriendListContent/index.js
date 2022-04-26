@@ -14,7 +14,7 @@ function FriendListContent() {
     const lastScrollTopRef = useRef(0)
     const [triggerApi, setTriggerApi] = useState(false)
     const [friendIds, setFriendIds] = useState([])
-    const scrollListener = useCallback((e) => helper.triggerBottomed(e, lastScrollTopRef, () => setTriggerApi(prev => !prev)), [])
+    const scrollListener = useCallback((e) => helper.floorTouch(e, lastScrollTopRef, () => setTriggerApi(prev => !prev)), [])
     useEffect(() => {
         const callback = async () => {
             const cookieObj = cookie.cookieToObject()

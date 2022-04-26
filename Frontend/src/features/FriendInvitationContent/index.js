@@ -12,7 +12,7 @@ function FriendInvitationContent() {
     const containerRef = useRef();
     const scrollContainerRef = useRef()
     const lastScrollRef = useRef()
-    const scrollListener = useCallback((e) => helper.triggerBottomed(e, lastScrollRef, () => setTriggerApi(prev => !prev), []))
+    const scrollListener = useCallback((e) => helper.floorTouch(e, lastScrollRef, () => setTriggerApi(prev => !prev), []))
     const [triggerApi, setTriggerApi] = useState(false)
     const [inviterIds, setInviterIds] = useState([])
     useEffect(() => {

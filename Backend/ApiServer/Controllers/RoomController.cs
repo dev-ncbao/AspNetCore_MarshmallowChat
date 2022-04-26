@@ -57,5 +57,21 @@ namespace ApiServer.Controllers
             List<int> roomIds = await RoomRepository.SelectPartAsync(_context, id, reqRoomIds);
             return Ok(await JsonUtil.SerializeAsync(roomIds));
         }
+
+        [HttpGet]
+        [Route("~/api/user/{id:int}/room/{roomId:int}/member")]
+        public async Task<IActionResult>GetRoomMember(int id, int roomId)
+        {
+            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
+            if (requestId != id || !await RoomMemberRepository.Exists(_context, roomId, id)) return BadRequest();
+            List<int> memberIds = RoomMemberRepository.SelectExceptSeft(_context, roomId, id);
+            List<UserModel> members = new List<UserModel>();
+            foreach(int memId in memberIds)
+            {
+                members.Add(await UserRepository.SelectShortInfoAsync(_context, memId));
+            }
+            return Ok(await JsonUtil.SerializeAsync(members));
+        }
     }
 }

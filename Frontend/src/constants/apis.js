@@ -12,6 +12,7 @@ const friend = 'friend'
 const invitation = 'invitation'
 const suggestion = 'suggestion'
 const message = 'message'
+const member = 'member'
 // message
 export const MESSAGE = {
     MESSAGE_GET: (userId, roomId, length) => helper.combinePath(user, userId, room, roomId, message, length)
@@ -39,5 +40,6 @@ export const FRIEND = {
 // room
 export const ROOM = {
     ROOM_GET: (userId, roomId) => helper.combinePath(user, userId, room, roomId, info),
-    ROOM_LIST_GET: (userId) => helper.combinePath(user, userId, rooms)
+    ROOM_LIST_GET: (userId) => helper.combinePath(user, userId, rooms),
+    ROOM_GET_MEMBER: (userId, roomId) => helper.combinePath(user, userId, room, roomId, member)
 }

@@ -47,5 +47,9 @@
 }
 
 .lastMessage {
-    color: var(--gray-2)
+    color: var(--gray-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
 }

@@ -34,7 +34,7 @@ namespace ApiServer.Controllers
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             if (!await UserRepository.UserExistsAsync(_context, id)) return BadRequest();
             CustomModels.UserModel user = await UserRepository.SelectShortInfoAsync(_context, id);
-            return Ok(await JsonUtil.SerializeAsync<CustomModels.UserModel>(user));
+            return Ok(await JsonUtil.SerializeAsync(user));
         }
 
         [HttpPost]

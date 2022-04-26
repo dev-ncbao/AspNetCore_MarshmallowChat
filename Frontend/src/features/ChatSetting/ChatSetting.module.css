@@ -1,0 +1,96 @@
+
+.rightContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.settingTitle {
+  color: var(--text-dark-2);
+  margin: auto;
+}
+
+.settingContainer {
+  flex: 1 1;
+  overflow-y: auto;
+}
+
+.settingTitleContainer {
+  height: 66px;
+  border-bottom: 2px solid var(--gray-5);
+}
+
+/*  */
+.subItemWrapper {
+  height: 50px;
+  padding-left: 24px;
+  gap: 10px;
+}
+
+.subItemWrapper:hover {
+  background-color: var(--gray-6);
+}
+
+.fileAndLinkWrapper {
+  height: fit-content !important;
+  padding: 0 !important;
+}
+
+.fileAndLinkWrapper:hover {
+  background-color: unset !important;
+  cursor: unset !important;
+}
+
+.itemName,
+.icon {
+  color: var(--text-dark-2);
+}
+
+.subSettingIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.memberAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gradient-2);
+}
+
+.memberInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.memberName {
+  color: var(--text-dark-2);
+}
+
+.memberAddedBy {
+  color: var(--gray-1);
+}
+
+.subNavContainer {
+  margin: auto;
+}
+
+.pictureContainer {
+  width: 100%;
+}
+
+.pictureWrapper {
+  --block: 70px;
+  --gap: 10px;
+  margin: auto;
+  max-width: calc(4 * var(--block) + 3 * var(--gap));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.pictureWrapper div {
+  width: 70px;
+  height: 70px;
+  background: var(--gradient-2);
+}

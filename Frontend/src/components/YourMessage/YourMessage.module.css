@@ -3,6 +3,8 @@
   border-radius: 20px;
   background-color: var(--gray-5);
   width: fit-content;
+  word-break: break-word;
+  word-wrap: break-word;
 }
 
 .yourMessageContent {

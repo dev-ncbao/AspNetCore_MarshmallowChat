@@ -1,14 +1,25 @@
-export const triggerBottomed = (e, lastScrollTopRef, callback) => {
-    if (lastScrollTopRef.current >= 0) {
+export const floorTouch = (e, lastScrollRef, callback) => {
+    if (lastScrollRef.current >= 0) {
         const { scrollTop, offsetHeight, scrollHeight } = e.target
         const scroll = scrollHeight - scrollTop
         const scrollFloor = Math.floor(scroll)
-        if (Math.floor(Math.abs(offsetHeight - scroll)) === 0 && scrollFloor < lastScrollTopRef.current){
-            lastScrollTopRef.current = 0
+        if (Math.floor(Math.abs(offsetHeight - scroll)) === 0 && scrollFloor < lastScrollRef.current) {
+            lastScrollRef.current = 0
             callback()
-        }            
-        else lastScrollTopRef.current = scrollFloor
-        
+        }
+        else lastScrollRef.current = scrollFloor
+
+    }
+}
+
+export const ceilingTouch = (e, lastScrollRef, callback) => {
+    if (lastScrollRef.current >= -1) {
+        const { scrollTop } = e.target
+        const scroll = Math.ceil(scrollTop)
+        if (scroll === 0 && scroll < lastScrollRef.current) {
+            callback()
+        }
+        else lastScrollRef.current = scroll
     }
 }
 
@@ -21,6 +32,19 @@ export const useEffectBindEvent = (elementRef, type, callback, option = false) =
     }
 }
 
-export const combinePath = (...routes) =>{
+export const combinePath = (...routes) => {
     return '/' + routes.reduce((prev, cur) => `${prev}/${cur}`)
+}
+
+export const distanceTime = (time) => {
+    const aMinute = 60;
+    const anHour = 60 * aMinute;
+    const aDay = 24 * anHour;
+    const last = new Date(time)
+    const now = new Date()
+    const distance = Math.round((now - last) / 1000, 0);
+    if (distance < aMinute) return `${Math.round(distance, 0)} giây`
+    else if (distance < anHour) return `${Math.round(distance / aMinute)} phút`
+    else if (distance < aDay) return `${Math.round(distance / anHour)} giờ`
+    else return `${Math.round(distance / aDay)} ngày`
 }
