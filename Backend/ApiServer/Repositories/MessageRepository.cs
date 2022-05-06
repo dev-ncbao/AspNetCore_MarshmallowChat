@@ -28,7 +28,7 @@ namespace ApiServer.Repositories
         public static async Task<List<MessageModel>> SelectMessage(MarshmallowChatContext _context, int roomId, int length)
         {
             List<MessageModel> messages = _context.Messages.Where(m => m.RoomId == roomId)
-                .OrderByDescending(m => m.TimeCreated)
+                .OrderBy(m => m.TimeCreated)
                 .Skip(length)
                 .Take(ModelConstants.takeLength)
                 .Select(m => new MessageModel()

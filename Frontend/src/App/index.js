@@ -1,25 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { io } from 'socket.io-client';
 //
 import { ContactProvider } from './../stores/contact';
+import { IOProvider } from './../stores/io'
 import { ChatProvider } from './../stores/chat';
 import { Chat, Contact, Home, Login, ResetPassword, Register } from './../pages';
 import {  ChatPanel } from './../features';
 import './style.css';
 
-/* const socket = io('https://localhost:3443', {
-	withCredentials: true,
-	extraHeaders: {
-		'Content-type': 'application/json',
-		Accept: 'application/json'
-	}
-}); */
-
 function Container() {
 	return (
 		<Router>
 			<Routes>
-				<Route path='/' element={<Home />}>
+				<Route path='/' element={<IOProvider><Home /></IOProvider>}>
 					<Route path='chat' element={<ChatProvider><Chat /></ChatProvider>} >
 						<Route path=':id' element={<ChatPanel />} />
 					</Route>

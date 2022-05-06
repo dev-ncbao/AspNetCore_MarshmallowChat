@@ -1,5 +1,6 @@
 // API Url
 export const SERVER_URL = 'https://localhost:44369/api';
+export const SOCKET_URL = 'https://localhost:'
 // Status code
 export const STATUS_CODE = {
     // 2xx

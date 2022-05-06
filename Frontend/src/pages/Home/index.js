@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //
+import { useIOStore } from './../../stores/io'
 import { Header } from './../../features';
 import { Body, AppContainer } from './../../containers';
 import { login } from './../../apis';
@@ -9,6 +10,7 @@ import { https, routes } from '../../constants';
 function Home() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [state, dispatch] = useIOStore()
 
     useEffect(() => {
         const callback = async () => {
@@ -16,7 +18,7 @@ function Home() {
                 const response = await login.check().catch(() => {
                     navigate(routes.ROUTES.LOGIN);
                 });
-                if(!response) return
+                if (!response) return
                 if (response.status === https.STATUS_CODE.UNAUTHORIZED)
                     navigate(routes.ROUTES.LOGIN);
                 else if (response.status === https.STATUS_CODE.OK && location.pathname === routes.ROUTES.HOME)
@@ -24,6 +26,8 @@ function Home() {
             }
         }
         callback();
+        dispatch({ type: 'echo' })
+        dispatch({ type: 'join' })
     }, []);
 
     return (

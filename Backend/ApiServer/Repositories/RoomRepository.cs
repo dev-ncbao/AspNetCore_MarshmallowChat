@@ -12,6 +12,12 @@ namespace ApiServer.Repositories
 {
     public static class RoomRepository
     {
+        public static async Task<List<int>> SelectAllAsync(MarshmallowChatContext _context)
+        {
+            List<int> roomIds = await _context.Rooms.Select(r => r.RoomId).ToListAsync();
+            return roomIds;
+        }
+
         public static async Task<List<int>> SelectAsync(MarshmallowChatContext _context, int userId)
         {
             List<int> roomIds = await _context.RoomMembers.Where(rm => rm.UserId == userId).Select(rm => rm.RoomId).ToListAsync();

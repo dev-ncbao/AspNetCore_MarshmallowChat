@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiServer.Extensions;
+using ApiServer.Kafka;
+using Confluent.Kafka;
+using Confluent.Kafka.Admin;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +18,7 @@ namespace ApiServer
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().ConsumeMessage().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

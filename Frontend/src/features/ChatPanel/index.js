@@ -11,9 +11,11 @@ import { cookie, helper } from './../../utils'
 import { YourMessage, OtherMessage } from './../../components'
 import { LayoutCenter } from './../../containers'
 import { ChatSetting } from './../../features'
+import { useIOStore } from './../../stores/io'
 import styles from './ChatPanel.module.css'
 
 function ChatPanel() {
+    const [ioState, ioDispatch] = useIOStore()
     const [triggerApi, setTriggerApi] = useState(false)
     const [inputFocus, setInputFocus] = useState(false)
     const [toggleSetting, setToggleSetting] = useState(false)
@@ -115,6 +117,14 @@ function ChatPanel() {
 
     const handleToggleSetting = () => setToggleSetting(!toggleSetting)
 
+    const handleSendMessage = () => {
+        console.log('send the message')
+        ioDispatch({
+            type: 'chat:to-room',
+            payload: { roomId: 1, message: 'hola' }
+        })
+    }
+
     return (
         <>
             {/* {console.log('ChatPanel re-render')} */}
@@ -177,7 +187,7 @@ function ChatPanel() {
                             <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnAddEmoji)}>
                                 <FontAwesomeIcon icon={faFaceSmile} />
                             </button>
-                            <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnSendMessage)}>
+                            <button onClick={handleSendMessage} className={clsx('cursor-pointer', 'clear-button-tag', styles.btnSendMessage)}>
                                 <FontAwesomeIcon icon={faPaperPlane} />
                             </button>
                         </div>

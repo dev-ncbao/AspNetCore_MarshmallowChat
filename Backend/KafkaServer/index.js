@@ -4,15 +4,22 @@ const cors = require("cors");
 const fs = require('fs');
 const { Server } = require("socket.io");
 const { createServer } = require("https");
-const registerChatHandler = require("./events/chatHandler")
+const {
+    registerChatHandler, 
+    registerRoomHandler} = require('./events')
 //const { Kafka } = require("kafkajs");\
 
 const onConnection = (socket) => {
     registerChatHandler(io, socket);
+    registerRoomHandler(io, socket);
+    socket.on('echo', message => {
+        console.log(message)
+    })
 }
 
 const onAuthorization = (socket, next) => {
     console.log("Authorization trigger", socket.handshake.headers);
+    console.log("Socket id: ", socket.id)
     next()
 }
 
@@ -39,7 +46,7 @@ io.on("connection", onConnection);
 httpsServer.listen(3443, () => console.log('Server is listening on port 3443'));
 
 
-/* // kafka
+// kafka
 const kafka = new Kafka({
     clientId: "my-app",
     brokers: ["localhost:9092"],
@@ -67,4 +74,4 @@ setInterval(async () => {
         ]
     });
     await producer.disconnect();
-}, 2000); */
+}, 2000);

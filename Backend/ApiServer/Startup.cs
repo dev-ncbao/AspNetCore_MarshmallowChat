@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ApiServer.CustomModels;
 using ApiServer.Extensions;
+using ApiServer.Kafka;
 using ApiServer.Middlewares;
 using ApiServer.Models;
 using ApiServer.Repositories;
@@ -69,6 +70,8 @@ namespace ApiServer
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiServer", Version = "v1" });
             });
             services.AddTransient<MarshmallowChatContext>();
+            services.AddTransient<AdminKafka>();
+            services.AddSingleton(service => new ConsumerKafka(service.GetService<MarshmallowChatContext>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
