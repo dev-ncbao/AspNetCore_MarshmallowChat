@@ -12,10 +12,16 @@ namespace ApiServer.Repositories
 {
     public static class RoomRepository
     {
-        public static async Task<List<int>> SelectAllAsync(MarshmallowChatContext _context)
+        public static async Task<List<string>> SelectTopicAsync(MarshmallowChatContext _context, int userId)
         {
-            List<int> roomIds = await _context.Rooms.Select(r => r.RoomId).ToListAsync();
-            return roomIds;
+            List<string> topic = await _context.RoomMembers.Where(rm => rm.UserId == userId).Select(rm => $"MLC-Topic{rm.RoomId}").ToListAsync();
+            return topic;
+        }
+
+        public static async Task<List<string>> SelectAllTopicAsync(MarshmallowChatContext _context)
+        {
+            List<string> topic = await _context.Rooms.Select(rm => $"MLC-Topic{rm.RoomId}").ToListAsync();
+            return topic;
         }
 
         public static async Task<List<int>> SelectAsync(MarshmallowChatContext _context, int userId)
@@ -40,8 +46,29 @@ namespace ApiServer.Repositories
                 lastMessages.Add(MessageRepository.SelectLastMessage(_context, room));
             }
             rooms = new List<int>();
-            rooms = lastMessages.OrderByDescending(m => m.TimeCreated).Select(m => m.RoomId).Take(takeLength).ToList();
+            rooms = lastMessages.OrderByDescending(m => m.DateCreated).Select(m => m.RoomId).Take(takeLength).ToList();
             return rooms;
+        }
+
+        public static async Task<List<RoomModel>> SelectPartAsync(MarshmallowChatContext _context, int userId, List<RoomModel> roomsInfo)
+        {
+            List<int> roomIds = roomsInfo.Select(r => r.RoomId).ToList();
+            List<int> rooms = RoomsHaveMessage(_context, userId);
+            rooms = rooms.Except(roomIds).ToList();
+            List<MessageModel> lastMessages = new List<MessageModel>();
+            foreach (int room in rooms)
+            {
+                lastMessages.Add(MessageRepository.SelectLastMessage(_context, room));
+            }
+            rooms = new List<int>();
+            rooms = lastMessages.OrderByDescending(m => m.DateCreated).Select(m => m.RoomId).Take(takeLength).ToList();
+            List<RoomModel> roomsInfoNext = new List<RoomModel>();
+            foreach (int room in rooms)
+            {
+
+                roomsInfoNext.Add(await SelectWithLastMessageAsync(_context, room, userId));
+            }
+            return roomsInfoNext;
         }
 
         public static async Task<int> SelectAsync(MarshmallowChatContext _context, int userId, int friendId)
@@ -81,11 +108,12 @@ namespace ApiServer.Repositories
             RoomType roomType = (RoomType)SelectType(_context, roomId);
             roomModel.RoomId = roomId;
             roomModel.Type = roomType;
+            roomModel.Members = RoomMemberRepository.SelectMemberExpectSelf(_context, roomId, userId);
             if(roomModel.Type == RoomType.Group)
             {
                 RoomInfo roomInfo = RoomInfoRepository.Select(_context, roomId);
-                roomInfo.Avatar = roomInfo.Avatar;
-                roomInfo.Name = roomInfo.Name;
+                roomModel.Avatar = roomInfo.Avatar;
+                roomModel.Name = roomInfo.Name;
             }
             else
             {
@@ -100,6 +128,7 @@ namespace ApiServer.Repositories
         public static async Task<int> InsertAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
             Room room = new Room();
+            room.DateCreated = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             room.Type = (int)RoomType.Private;
             EntityEntry entry = await _context.Rooms.AddAsync(room);
             await _context.SaveChangesAsync();

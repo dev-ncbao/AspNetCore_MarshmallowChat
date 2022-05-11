@@ -4,37 +4,38 @@ import clsx from 'clsx'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 //
-import { useChatStore, ChatActions } from './../../stores/chat'
-import { message as messageApi, room as roomApi } from './../../apis'
-import { https, cookies, messages as messagesCst, routes, rooms, users } from './../../constants'
+import { useStore as useChatStore, actions as chatActions } from './../../stores/chat'
+import { message as messageApi } from './../../apis'
+import { https, cookies, messages as messagesCst, routes } from './../../constants'
 import { cookie, helper } from './../../utils'
 import { YourMessage, OtherMessage } from './../../components'
 import { LayoutCenter } from './../../containers'
 import { ChatSetting } from './../../features'
-import { useIOStore } from './../../stores/io'
+import { useStore as useIOStore } from './../../stores/io'
 import styles from './ChatPanel.module.css'
 
 function ChatPanel() {
-    const [ioState, ioDispatch] = useIOStore()
+    const [{ socketSession }] = useIOStore()
     const [triggerApi, setTriggerApi] = useState(false)
     const [inputFocus, setInputFocus] = useState(false)
     const [toggleSetting, setToggleSetting] = useState(false)
-    const [{ room, activeRoom, rooms }, dispatch] = useChatStore()
-    const { messages, members, info } = room
+    const [{ messages, rooms, activeRoom }, dispatch] = useChatStore()
+    const room = rooms.find(r => r.RoomId === activeRoom)
     const cookieObj = cookie.cookieToObject()
     const navigate = useNavigate()
     const containerRef = useRef()
     const lastScrollRef = useRef(-1)
+    const inputRef = useRef()
     const listenScroll = useCallback((e) => helper.ceilingTouch(e, lastScrollRef, () => setTriggerApi(prev => !prev)), [])
 
     useEffect(() => helper.useEffectBindEvent(containerRef, 'scroll', listenScroll), [])
 
-    useEffect(() => {
-        if (activeRoom !== 0) {
-            getMembers()
-            getRoomInfo()
-        }
-    }, [activeRoom])
+    /*     useEffect(() => {
+            if (activeRoom !== 0) {
+                getMembers()
+                getRoomInfo()
+            }
+        }, [activeRoom]) */
 
     useEffect(() => {
         if (activeRoom !== 0)
@@ -51,16 +52,16 @@ function ChatPanel() {
             navigate(routes.ROUTES.LOGIN)
         else if (response.status === https.STATUS_CODE.OK)
             await response.json().then(data => {
-                if (data.length > 0) dispatch(ChatActions.setMessages([...data, ...messages]))
+                if (data.length > 0) dispatch(chatActions.addOldMessage([...data, ...messages]))
             })
     }
 
-    const getRoomInfo = async () => {
+    /* const getRoomInfo = async () => {
         const cookieObj = cookie.cookieToObject()
         const response = await roomApi.get(cookieObj[cookies.USER_ID], activeRoom)
         if (response.status === https.STATUS_CODE.OK)
             response.json().then(data => {
-                dispatch(ChatActions.setRoomInfo(data))
+                dispatch(chatActions.setRoomInfo(data))
             })
     }
 
@@ -69,36 +70,46 @@ function ChatPanel() {
         if (response.status === https.STATUS_CODE.UNAUTHORIZED) navigate(routes.ROUTES.LOGIN)
         else if (response.status === https.STATUS_CODE.OK) {
             await response.json().then(data => {
-                dispatch(ChatActions.setMembers(data))
+                dispatch(chatActions.setMembers(data))
             })
         }
-    }
+    } */
 
-    const sendMessage = (messageContent) => {
+    const handleSendMessage = (messageContent) => {
         const message = {
             MessageId: null,
-            RoomId: info.RoomId,
+            RoomId: room.RoomId,
             Content: messageContent,
             Type: 0,
-            TimeCreated: new Date().toISOString(),
+            DateCreated: new Date().getTime(),
             UserId: parseInt(cookieObj[cookies.USER_ID])
         }
-        dispatch(ChatActions.setMessages([...messages, message]))
+        socketSession.socket.emit('chat:receive', message)
+        //dispatch(chatActions.setMessages([...messages, message]))
+    }
+
+    const handleClickSend = () => {
+        const messageContent = inputRef.current.innerText;
+        if (messageContent !== '' && inputFocus === true) {
+            handleSendMessage(messageContent)
+            inputRef.current.innerText = 'Nhập tin nhắn của bạn vào đây'
+            setInputFocus(false)
+        }
     }
 
     const handleKeyPress = (e) => {
         if (e.which === 13 && e.shiftKey === false) {
             e.preventDefault()
             if (e.target.innerText !== '') {
-                sendMessage(e.target.innerText)
+                handleSendMessage(e.target.innerText)
                 e.target.innerText = ''
             }
         }
     }
 
     const getSender = (senderId) => {
-        const index = members.findIndex((member) => member.UserId == senderId)
-        return members[index]
+        if (room && room.Members)
+            return room.Members.find((member) => member.UserId === senderId)
     }
 
     const handleFocus = (e) => {
@@ -117,14 +128,6 @@ function ChatPanel() {
 
     const handleToggleSetting = () => setToggleSetting(!toggleSetting)
 
-    const handleSendMessage = () => {
-        console.log('send the message')
-        ioDispatch({
-            type: 'chat:to-room',
-            payload: { roomId: 1, message: 'hola' }
-        })
-    }
-
     return (
         <>
             {/* {console.log('ChatPanel re-render')} */}
@@ -135,7 +138,7 @@ function ChatPanel() {
                             <div className={clsx(styles.chatInfo, 'd-flex')}>
                                 <div className={styles.avatar}></div>
                                 <div className={clsx('d-flex', 'flex-col')}>
-                                    <span className={clsx('text-headline-3', styles.name)}>{info.Name}</span>
+                                    <span className={clsx('text-headline-3', styles.name)}>{room && room.Name}</span>
                                     <span className={clsx('text-body-4', styles.accessState)}>Đang hoạt động</span>
                                 </div>
                             </div>
@@ -177,7 +180,8 @@ function ChatPanel() {
                                         className={clsx({
                                             [styles.inputMessagePlaceholder]: !inputFocus
                                         }, styles.inputMessage, 'text-body-2')}
-                                        id="input-message"
+                                        /* id="input-message" */
+                                        ref={inputRef}
                                         onFocus={handleFocus}
                                         onBlur={handleBlur}
                                         onKeyPress={handleKeyPress}
@@ -187,7 +191,7 @@ function ChatPanel() {
                             <button className={clsx('cursor-pointer', 'clear-button-tag', styles.btnAddEmoji)}>
                                 <FontAwesomeIcon icon={faFaceSmile} />
                             </button>
-                            <button onClick={handleSendMessage} className={clsx('cursor-pointer', 'clear-button-tag', styles.btnSendMessage)}>
+                            <button onClick={handleClickSend} className={clsx('cursor-pointer', 'clear-button-tag', styles.btnSendMessage)}>
                                 <FontAwesomeIcon icon={faPaperPlane} />
                             </button>
                         </div>

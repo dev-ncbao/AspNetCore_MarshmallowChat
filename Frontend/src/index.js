@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider as IOProvider } from './stores/io'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <IOProvider><App /></IOProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

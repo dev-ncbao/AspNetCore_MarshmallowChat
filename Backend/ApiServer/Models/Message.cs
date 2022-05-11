@@ -12,7 +12,7 @@ namespace ApiServer.Models
         public int RoomId { get; set; }
         public string Content { get; set; }
         public MessageType Type { get; set; }
-        public DateTime TimeCreated { get; set; }
+        public long DateCreated { get; set; }
         public int? UserId { get; set; }
 
         public virtual Room Room { get; set; }

@@ -6,6 +6,7 @@ using ApiServer.Repositories;
 using ApiServer.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,9 +59,19 @@ namespace ApiServer.Controllers
             return Ok(await JsonUtil.SerializeAsync(roomIds));
         }
 
+        [HttpPost]
+        [Route("~/api/user/{userId:int}/rooms/info")]
+        public async Task<IActionResult> GetListRoomInfo(int userId, JsonDocument js)
+        {
+            if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            List<RoomModel> payload = js.RootElement.Deserialize<List<RoomModel>>();
+            List<RoomModel> responsePayload = await RoomRepository.SelectPartAsync(_context, userId, payload);
+            return Ok(await JsonUtil.SerializeAsync(responsePayload));
+        }
+
         [HttpGet]
         [Route("~/api/user/{id:int}/room/{roomId:int}/member")]
-        public async Task<IActionResult>GetRoomMember(int id, int roomId)
+        public async Task<IActionResult> GetRoomMember(int id, int roomId)
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
             int requestId = Convert.ToInt32(HttpContext.Request.Cookies[CookieConstants.id]);
@@ -72,6 +83,20 @@ namespace ApiServer.Controllers
                 members.Add(await UserRepository.SelectShortInfoAsync(_context, memId));
             }
             return Ok(await JsonUtil.SerializeAsync(members));
+        }
+
+        [HttpGet]
+        [Route("~/api/user/{id:int}/topic")]
+        public async Task<IActionResult> GetListTopic(int id)
+        {
+            StringValues cookieString;
+            HttpContext.Request.Headers.TryGetValue(HeaderConstants.XCookies, out cookieString);
+            var cookies = CookieUtil.ToDictionary(cookieString);
+            int requestId = Convert.ToInt32(cookies[CookieConstants.id]);
+            if (id != requestId || !await ControllerHelper.CheckAuthentication(_context, cookies))
+                return Unauthorized();
+            List<string> topics = await RoomRepository.SelectTopicAsync(_context, id);
+            return Ok(await JsonUtil.SerializeAsync(topics));
         }
     }
 }

@@ -7,7 +7,7 @@ import styles from './Register.module.css';
 import { InputLarge, InputSmall, ButtonRounded, InputRadio } from './../../components';
 import { CardLarge, AppContainer } from '../../containers';
 import { UserValidation } from './../../validations';
-import { user } from './../../apis';
+import { user as userApi } from './../../apis';
 import { https } from './../../constants';
 
 function Register() {
@@ -68,8 +68,8 @@ function Register() {
             let user = { ...account };
             delete user.PasswordSecondary;
             if (isValid) {
-                const response = await user.post(JSON.stringify(user));
-                if(!response)
+                const response = await userApi.post(JSON.stringify(user));
+                if(!response) return
                 if (response.status === https.STATUS_CODE.CONFLICT
                     || response.status === https.STATUS_CODE.INTERNAL_SERVER_ERROR) {
                     response.clone().json().then(data => {

@@ -38,11 +38,12 @@ namespace ApiServer
             {
                 options.AddPolicy(Setting.MyAllowSpecificOrigins, configure =>
                 {
-                    configure.WithOrigins("http://localhost:3000", "https://localhost:3000");
+                    configure.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:3443", "https://localhost:3443");
                     configure.AllowAnyMethod();
                     configure.WithHeaders(
                         HeaderNames.ContentType,
-                        HeaderNames.Authorization
+                        HeaderNames.Authorization,
+                        "X-Cookies"
                     );
                     configure.AllowCredentials();
                 });

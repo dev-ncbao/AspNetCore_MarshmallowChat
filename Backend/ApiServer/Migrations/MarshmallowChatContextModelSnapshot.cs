@@ -28,8 +28,9 @@ namespace ApiServer.Migrations
                     b.Property<int>("To")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<long>("DateCreated")
+                        .HasMaxLength(20)
+                        .HasColumnType("bigint");
 
                     b.HasKey("From", "To");
 
@@ -46,8 +47,9 @@ namespace ApiServer.Migrations
                     b.Property<int>("User2Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<long>("DateCreated")
+                        .HasMaxLength(20)
+                        .HasColumnType("bigint");
 
                     b.HasKey("User1Id", "User2Id");
 
@@ -62,17 +64,16 @@ namespace ApiServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("MessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("TimeCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<long>("DateCreated")
+                        .HasMaxLength(20)
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Type")
                         .HasMaxLength(10)
@@ -94,6 +95,10 @@ namespace ApiServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("DateCreated")
+                        .HasMaxLength(20)
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -148,8 +153,9 @@ namespace ApiServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime");
+                    b.Property<long>("DateCreated")
+                        .HasMaxLength(20)
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("DayOfBirth")
                         .HasColumnType("date");

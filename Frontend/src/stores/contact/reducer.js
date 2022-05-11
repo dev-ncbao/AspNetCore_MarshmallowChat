@@ -1,7 +1,7 @@
-import { faUserGroup, faUserPlus, faUserClock, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faUserGroup, faUserPlus, faUserClock, faUsers } from "@fortawesome/free-solid-svg-icons"
 //
-import { FriendListContent, FriendAdditionContent, FriendInvitationContent, GroupListContent, GroupAddContent } from './../../features';
-import * as types from './types';
+import { FriendListContent, FriendAdditionContent, FriendInvitationContent, GroupListContent, GroupAddContent } from './../../features'
+import * as types from './types'
 
 const initState = {
     nav: {
@@ -25,29 +25,29 @@ const initState = {
 }
 
 const reducer = (state = initState, action) => {
-    const { type, payload } = action;
-    let next;
-    switch (type) {
+    const newState = {...state}
+    switch (action.type) {
         case types.SET_NAV_CHECKED:
-            if (state.nav.checked !== payload.checked) {
-                next = { ...state };
-                next.nav.checked = payload.checked;
-                next.menu.forEach((value) => {
-                    value.checked = 0;
-                });
-                return next;
-            }
-            return state;
-        case types.SET_MENU_CHECKED:
-            if (state.menu[state.nav.checked].checked !== payload.checked) {
-                next = { ...state };
-                next.menu[next.nav.checked].checked = payload.checked;
-                return next;
+            const checked = action.payload.checked
+            if (newState.nav.checked !== checked) {
+                newState.nav.checked = checked
+                newState.menu.forEach((value) => {
+                    value.checked = 0
+                })
+                return newState
             }
             return state
-        default: throw new Error('Invalid action');
+        case types.SET_MENU_CHECKED:
+            const navChecked = newState.nav.checked
+            const menuChecked = action.payload.checked
+            if (newState.menu[navChecked].checked !== menuChecked) {
+                newState.menu[navChecked].checked = menuChecked
+                return newState
+            }
+            return state
+        default: throw new Error('Invalid action')
     }
 }
 
-export default reducer;
-export { initState };
+export default reducer
+export { initState }

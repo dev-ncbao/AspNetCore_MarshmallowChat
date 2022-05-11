@@ -3,13 +3,13 @@ import { useReducer } from 'react'
 import Context from './Context'
 import reducer, { initialState } from './reducer'
 
-function Provider({children}){
+function Provider({ children }) {
     const [state, dispatch] = useReducer(reducer, initialState)
-    return(
+    return (
         <Context.Provider value={[state, dispatch]}>
             {children}
         </Context.Provider>
     )
 }
 
-export default Provider
+export { Provider }

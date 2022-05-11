@@ -1,32 +1,27 @@
-import * as types from './type'
+import * as types from './types'
 
-export const addMessage = (payload) => ({
-    type: types.ADD_MESSAGE,
+export const addRoom = (payload) => ({
+    type: types.ADD_ROOM,
+    payload
+})
+export const addRooms = (payload) => ({
+    type: types.ADD_ROOMS,
     payload
 })
 
-export const setRoomInfo = (payload) => ({
-    type: types.SET_ROOMS_INFO,
+export const addNewMessage = (payload) => ({
+    type: types.ADD_NEW_MESSAGE,
     payload
 })
-
-export const setMembers = (payload) => ({
-    type: types.SET_MEMBERS,
+export const addOldMessage = (payload) => ({
+    type: types.ADD_OLD_MESSAGE,
     payload
 })
-
-export const setMessages = (payload) => ({
-    type: types.SET_MESSAGES,
+export const updateActiveRoom = (payload) => ({
+    type: types.UPDATE_ACTIVE_ROOM,
     payload
 })
-
-export const setRooms = (payload) => ({
-    type: types.SET_ROOMS,
+export const updateRoomLastMessage = (payload) => ({
+    type: types.UPDATE_ROOM_LAST_MESSAGE,
     payload
 })
-
-export const setActiveRoom = (payload) => ({
-    type: types.SET_ACTIVE_ROOM,
-    payload
-})
-

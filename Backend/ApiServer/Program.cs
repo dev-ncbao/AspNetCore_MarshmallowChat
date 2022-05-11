@@ -18,7 +18,7 @@ namespace ApiServer
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().ConsumeMessage().Run();
+            CreateHostBuilder(args).Build().InitialTopics().ConsumeMessage().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

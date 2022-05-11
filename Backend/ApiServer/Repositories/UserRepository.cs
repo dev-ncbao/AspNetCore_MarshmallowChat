@@ -36,7 +36,7 @@ namespace ApiServer.Repositories
 
         public static async Task<User> SelectAsync(MarshmallowChatContext _context, string username, string password)
         {
-            User user = await _context.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefaultAsync<User>();
+            User user = await _context.Users.Where(u => (u.Username == username || u.Email == username) && u.Password == password).FirstOrDefaultAsync();
             return user;
         }
 
@@ -60,6 +60,7 @@ namespace ApiServer.Repositories
 
         public static async Task<User> InsertAsync(MarshmallowChatContext _context, User user)
         {
+            user.DateCreated = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             EntityEntry entry = await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             if (entry.State == EntityState.Unchanged) return user;

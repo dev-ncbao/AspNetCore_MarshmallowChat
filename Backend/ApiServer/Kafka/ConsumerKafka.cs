@@ -1,5 +1,7 @@
-﻿using ApiServer.Models;
+﻿using ApiServer.CustomModels;
+using ApiServer.Models;
 using ApiServer.Repositories;
+using ApiServer.Utils;
 using Confluent.Kafka;
 using System;
 using System.Collections.Generic;
@@ -22,11 +24,12 @@ namespace ApiServer.Kafka
             config.GroupId = "MLC-ServerConsumerGroup";
             config.ClientId = "MLC-ServerConsumer";
             config.BootstrapServers = "localhost:9092";
-            config.AllowAutoCreateTopics = false;
+            /*config.AllowAutoCreateTopics = false;*/
             config.EnableAutoOffsetStore = false;
             config.TopicMetadataRefreshIntervalMs = 5000;
             config.MetadataMaxAgeMs = 5000;
             config.TopicMetadataPropagationMaxMs = 5000;
+            config.AutoOffsetReset = AutoOffsetReset.Earliest;
             //
             ConsumerBuilder<string, string> builder = new ConsumerBuilder<string, string>(config);
             Consumer = builder.Build();
@@ -37,12 +40,14 @@ namespace ApiServer.Kafka
 
         public async Task ConsumeMessage()
         {
-            await Task.Factory.StartNew(() =>
+            await Task.Factory.StartNew(async () =>
             {
                 Consumer.Subscribe(@"^MLC-Topic\d+");
+                Debug.WriteLine(@$"Consumer: Start consume");
                 while (true)
                 {
                     ConsumeResult<string, string> result = Consumer.Consume(CancellationToken.Token);
+                    MessageModel message = await JsonUtil.DeserializeAsync<MessageModel>(result.Message.Value);
                     Debug.WriteLine(@$"Consumer:
 ==========================================
 Message: {result.Message.Key} - {result.Message.Value}
@@ -51,7 +56,10 @@ Partition: {result.Partition.Value}
 Topic: {result.Topic}
 Position: {Consumer.Position(result.TopicPartition)}
 ==========================================");
-                    Consumer.StoreOffset(result);
+                    message.MessageId = Convert.ToInt32(result.Offset.Value);
+                    if (!await MessageRepository.ExistsAsync(_context, message) && await MessageRepository.InsertAsync(_context, message) != null)
+                        Consumer.StoreOffset(result);
+
                 }
             });
         }

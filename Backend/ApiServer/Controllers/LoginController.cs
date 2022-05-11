@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using ApiServer.Controllers;
 using ApiServer.CustomModels;
+using Microsoft.Extensions.Primitives;
 
 namespace ApiServer
 {
@@ -32,13 +33,15 @@ namespace ApiServer
             //_provider = provider;
         }
 
-        /*[AllowAnonymous]
-        [HttpGet]
-        [Route("~/api/user/{id:int}/room/{roomId:int}/message")]
-        public async Task<IActionResult> Test(int id, int roomId)
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("~/api/test")]
+        public async Task<IActionResult> Test(JsonDocument js)
         {
-            return Ok(await JsonUtil.SerializeAsync<List<MessageModel>>(await MessageRepository.SelectMessage(_context, roomId, 0)));
-        }*/
+            return Ok(
+                await JsonUtil.SerializeAsync(await RoomRepository.SelectPartAsync(_context, 1, new List<RoomModel>()))
+                ) ;
+        }
 
         [HttpGet]
         [Route("~/api/logout")]
@@ -56,6 +59,18 @@ namespace ApiServer
         public async Task<IActionResult> CheckLogin()
         {
             if (!await ControllerHelper.CheckAuthentication(_context, HttpContext)) return Unauthorized();
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("authentication")]
+        public async Task<IActionResult> Authentication()
+        {
+            StringValues cookieString;
+            HttpContext.Request.Headers.TryGetValue(HeaderConstants.XCookies, out cookieString);
+            var cookies = CookieUtil.ToDictionary(cookieString);
+            if (!await ControllerHelper.CheckAuthentication(_context, cookies))
+                return Unauthorized();
             return Ok();
         }
 

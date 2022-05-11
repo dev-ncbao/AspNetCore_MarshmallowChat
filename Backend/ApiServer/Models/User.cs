@@ -35,7 +35,7 @@ namespace ApiServer.Models
         [Required]
         public string Gender { get; set; }
         public string Avatar { get; set; }
-        public DateTime DateCreated { get; set; }
+        public long DateCreated { get; set; }
         [StringLength(64, MinimumLength = 64)]
         public string Secret { get; set; }
 

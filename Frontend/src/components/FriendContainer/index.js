@@ -65,7 +65,7 @@ function FriendContainer({ friendId, containerRef }) {
     }
     const handleGoToChat = async () => {
         const cookieObj = cookie.cookieToObject()
-        const response = await room.get(cookieObj[cookies.USER_ID], friend[users.USER_ID])
+        const response = await room.get_find(cookieObj[cookies.USER_ID], friend[users.USER_ID])
         if (response.status === https.STATUS_CODE.UNAUTHORIZED)
             navigate(routes.ROUTES.LOGIN)
         else if (response.status === https.STATUS_CODE.OK) {

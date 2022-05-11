@@ -50,7 +50,7 @@ namespace ApiServer.Models
 
                 entity.HasKey(e => new { e.From, e.To });
 
-                entity.Property(e => e.DateCreated).IsRequired();
+                entity.Property(e => e.DateCreated).IsRequired().HasMaxLength(20);
             });
 
             modelBuilder.Entity<Friendship>(entity =>
@@ -60,6 +60,8 @@ namespace ApiServer.Models
                 entity.ToTable("Friendship");
 
                 entity.HasIndex(e => e.User2Id, "IX_Friendship_User2Id");
+
+                entity.Property(e => e.DateCreated).HasMaxLength(20);
 
                 entity.HasOne(d => d.User1)
                     .WithMany(p => p.FriendshipUser1s)
@@ -80,7 +82,7 @@ namespace ApiServer.Models
 
                 entity.HasIndex(e => e.UserId, "IX_Message_UserId");
 
-                entity.Property(e => e.MessageId).ValueGeneratedOnAdd();
+                entity.Property(e => e.DateCreated).HasMaxLength(20);
 
                 entity.Property(e => e.Content)
                     .IsRequired()
@@ -104,8 +106,14 @@ namespace ApiServer.Models
             {
                 entity.ToTable("Room");
 
+                entity.HasKey(e => e.RoomId);
+
+                entity.Property(e => e.RoomId).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Type)
                     .IsRequired();
+
+                entity.Property(e => e.DateCreated).HasMaxLength(20);
             });
 
             modelBuilder.Entity<RoomInfo>(entity =>
@@ -152,11 +160,12 @@ namespace ApiServer.Models
                 entity.ToTable("User");
 
                 entity.HasKey(e => e.UserId);
+
                 entity.Property(e => e.UserId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Avatar).HasMaxLength(100);
 
-                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+                entity.Property(e => e.DateCreated).HasMaxLength(20);
 
                 entity.Property(e => e.DayOfBirth).HasColumnType("date");
 

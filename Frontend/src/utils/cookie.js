@@ -1,4 +1,4 @@
-export const cookieToObject = () => {
+const cookieToObject = () => {
     if (document.cookie.length === 0) return null
     const obj = {}
     const cookies = document.cookie.trim()
@@ -9,3 +9,5 @@ export const cookieToObject = () => {
     })
     return obj
 }
+
+export { cookieToObject }

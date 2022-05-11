@@ -60,7 +60,7 @@
 .messagesContainer {
   flex: 1 1;
   overflow-y: auto;
-  margin: 18px 0;
+  margin: 9px 0;
   display: flex;
 /*   align-items: flex-end; */
 }
@@ -69,6 +69,7 @@
   flex: 1 1;
   margin: 0 24px;
   height: fit-content;
+  padding: 9px 0;
   gap: 12px;
   justify-content: flex-end;
 }

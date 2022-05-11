@@ -43,7 +43,7 @@ namespace ApiServer.Controllers
         {
             string upload = jd.RootElement.GetRawText();
             User user = await JsonUtil.DeserializeAsync<User>(upload);
-            user.DateCreated = DateTime.UtcNow.ToLocalTime();
+
             if (TryValidateModel(user))
             {
                 user.Password = await EncryptionUtil.SHA256HashAsync(user.Password);

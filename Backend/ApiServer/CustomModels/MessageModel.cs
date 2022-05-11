@@ -8,11 +8,11 @@ namespace ApiServer.CustomModels
 {
     public class MessageModel
     {
-        public int MessageId { get; set; }
+        public int? MessageId { get; set; }
         public int RoomId { get; set; }
         public string Content { get; set; }
         public MessageType Type { get; set; }
-        public DateTime TimeCreated { get; set; }
+        public long DateCreated { get; set; }
         public int? UserId { get; set; }
     }
 }

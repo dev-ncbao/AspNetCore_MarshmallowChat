@@ -1,4 +1,4 @@
-import * as types from './types';
+import * as types from './types'
 
 export const setNavChecked = (payload) => ({
     type: types.SET_NAV_CHECKED,

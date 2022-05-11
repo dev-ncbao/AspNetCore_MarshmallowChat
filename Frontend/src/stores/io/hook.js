@@ -3,4 +3,4 @@ import Context from './Context'
 
 const useStore = () => useContext(Context)
 
-export default useStore
+export { useStore }

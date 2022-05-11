@@ -69,11 +69,10 @@ namespace ApiServer.Repositories
 
         public static async Task<Friendship> InsertAsync(MarshmallowChatContext _context, int userId, int friendId)
         {
-            DateTime now = DateTime.UtcNow.ToLocalTime();
             Friendship friendship = new Friendship() {
                 User1Id = userId,
                 User2Id = friendId,
-                DateCreated = now
+                DateCreated = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             };
             EntityEntry entry = await _context.Friendships.AddAsync(friendship);
             await _context.SaveChangesAsync();

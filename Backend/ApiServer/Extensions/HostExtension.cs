@@ -1,4 +1,5 @@
 ﻿using ApiServer.Kafka;
+using ApiServer.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -17,6 +18,20 @@ namespace ApiServer.Extensions
             service.Get*/
             ConsumerKafka consumer = host.Services.GetService<ConsumerKafka>();
             consumer.ConsumeMessage();
+            return host;
+        }
+
+        public static IHost InitialTopics(this IHost host)
+        {
+            var admin = host.Services.GetService<AdminKafka>();
+            try
+            {
+                admin.InitialTopics().Wait();
+            }
+            catch(Exception ex)
+            {
+
+            }
             return host;
         }
     }

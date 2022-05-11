@@ -1,3 +1,3 @@
-export { default as IOProvider } from './Provider'
-export * as IOActions from './actions'
-export { default as useIOStore } from './hook'
+export { Provider } from './Provider'
+export * as actions from './actions'
+export { useStore } from './hook'

@@ -1,35 +1,16 @@
-import { io } from 'socket.io-client'
-
-const socket = io('https://localhost:3443', {
-    withCredentials: true,
-    extraHeaders: {
-        'Content-type': 'application/json',
-        Accept: 'application/json'
-    }
-});
-
-socket.on('chat:receive', data => {
-    console.log('receive', data)
-})
+import * as types from './types'
 
 const initState = {
-    socket: socket
+   socketSession: null
 }
 
 const reducer = (state, action) => {
+    const newState = { ...state }
     switch (action.type) {
-        case 'join':
-            console.log(state)
-            state.socket.emit('room:join', 1)
-            return state
-        case 'echo':
-            console.log(state)
-            state.socket.emit('echo', 'hello')
-            return state
-        case 'chat:to-room':
-            console.log(action.payload)
-            state.socket.emit('chat:to-room', action.payload)
-            return state
+        case types.SET_SOCKET:
+            newState.socketSession = action.payload
+            /* console.log(newState) */
+        return newState
         default:
             return console.log('Invalid action');
 

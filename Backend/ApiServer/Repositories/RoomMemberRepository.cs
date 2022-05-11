@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ApiServer.Repositories
 {
     public static class RoomMemberRepository
-    { 
+    {
         public static List<int> SelectExceptSeft(MarshmallowChatContext _context, int roomId, int userId)
         {
             List<int> userIds = _context.RoomMembers.Where(rm => rm.RoomId == roomId && rm.UserId != userId).Select(rm => rm.UserId).ToList();
@@ -28,6 +28,24 @@ namespace ApiServer.Repositories
                 Username = u.Username
             }).FirstOrDefault();
             return user != null ? user : null;
+        }
+
+        public static List<UserModel> SelectMemberExpectSelf(MarshmallowChatContext _context, int roomId, int userId)
+        {
+            List<UserModel> members = new List<UserModel>();
+            var membersId = _context.RoomMembers.Where(rm => rm.RoomId == roomId && rm.UserId != userId).Select(rm => rm.UserId).ToList();
+            foreach (var id in membersId)
+            {
+                members.Add(_context.Users.Where(u => u.UserId == id).Select(u => new UserModel()
+                {
+                    UserId = u.UserId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Avatar = u.Avatar,
+                    Username = u.Username
+                }).FirstOrDefault());
+            }
+            return members;
         }
 
         public static async Task<bool> Exists(MarshmallowChatContext _context, int roomId, int userId)

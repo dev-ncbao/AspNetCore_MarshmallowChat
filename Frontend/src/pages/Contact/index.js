@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 //
-import { useContactStore } from './../../stores/contact';
+import { useStore as useContactStore } from './../../stores/contact';
 import { setNavChecked, setMenuChecked } from './../../stores/contact/actions';
 import { NavSquared, NavRounded } from './../../components';
 import { Layout, LayoutLeft, LayoutCenter } from './../../containers';

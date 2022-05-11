@@ -1,4 +1,4 @@
-export const floorTouch = (e, lastScrollRef, callback) => {
+const floorTouch = (e, lastScrollRef, callback) => {
     if (lastScrollRef.current >= 0) {
         const { scrollTop, offsetHeight, scrollHeight } = e.target
         const scroll = scrollHeight - scrollTop
@@ -12,7 +12,7 @@ export const floorTouch = (e, lastScrollRef, callback) => {
     }
 }
 
-export const ceilingTouch = (e, lastScrollRef, callback) => {
+const ceilingTouch = (e, lastScrollRef, callback) => {
     if (lastScrollRef.current >= -1) {
         const { scrollTop } = e.target
         const scroll = Math.ceil(scrollTop)
@@ -23,7 +23,7 @@ export const ceilingTouch = (e, lastScrollRef, callback) => {
     }
 }
 
-export const useEffectBindEvent = (elementRef, type, callback, option = false) => {
+const useEffectBindEvent = (elementRef, type, callback, option = false) => {
     if (elementRef.current)
         elementRef.current.addEventListener(type, callback, option)
     return () => {
@@ -32,11 +32,11 @@ export const useEffectBindEvent = (elementRef, type, callback, option = false) =
     }
 }
 
-export const combinePath = (...routes) => {
+const combinePath = (...routes) => {
     return '/' + routes.reduce((prev, cur) => `${prev}/${cur}`)
 }
 
-export const distanceTime = (time) => {
+const distanceTime = (time) => {
     const aMinute = 60;
     const anHour = 60 * aMinute;
     const aDay = 24 * anHour;
@@ -47,4 +47,12 @@ export const distanceTime = (time) => {
     else if (distance < anHour) return `${Math.round(distance / aMinute)} phút`
     else if (distance < aDay) return `${Math.round(distance / anHour)} giờ`
     else return `${Math.round(distance / aDay)} ngày`
+}
+
+export {
+    floorTouch,
+    ceilingTouch,
+    combinePath,
+    distanceTime,
+    useEffectBindEvent
 }

@@ -9,7 +9,7 @@ namespace ApiServer.Models
     {
         public int User1Id { get; set; }
         public int User2Id { get; set; }
-        public DateTime DateCreated { get; set; }
+        public long DateCreated { get; set; }
 
         public virtual User User1 { get; set; }
         public virtual User User2 { get; set; }

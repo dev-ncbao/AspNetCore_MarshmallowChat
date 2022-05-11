@@ -1,5 +1,6 @@
 ﻿using ApiServer.Constants;
 using ApiServer.Helpers;
+using ApiServer.Kafka;
 using ApiServer.Models;
 using ApiServer.Repositories;
 using ApiServer.Utils;
@@ -18,10 +19,11 @@ namespace ApiServer.Controllers
     public class FriendController : ControllerBase
     {
         private readonly MarshmallowChatContext _context;
-
-        public FriendController(MarshmallowChatContext context)
+        private readonly AdminKafka _adminKafka;
+        public FriendController(MarshmallowChatContext context, AdminKafka adminKafka)
         {
             _context = context;
+            _adminKafka = adminKafka;
         }
         //
         [HttpGet]
@@ -58,7 +60,7 @@ namespace ApiServer.Controllers
             {
                 From = id,
                 To = strangerId,
-                DateCreated = DateTime.UtcNow.ToLocalTime()
+                DateCreated = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             };
             invitation = await FriendInvitationRepository.InsertAsync(_context, invitation);
             if (invitation == null) return StatusCode(500);
@@ -104,6 +106,10 @@ namespace ApiServer.Controllers
             int? roomId = await RoomRepository.InsertAsync(_context, id, friendId);
             if (friendship == null || !await FriendInvitationRepository.DeleteAsync(_context, id, friendId) || !roomId.HasValue)
                 return StatusCode(500);
+            _adminKafka.CreateTopic(new Confluent.Kafka.Admin.TopicSpecification()
+            {
+                Name = $"MLC-Topic{roomId.Value}"
+            });
             return Created("", await JsonUtil.SerializeAsync(roomId.Value));
         }
 

@@ -1,3 +1,4 @@
+import { combinePath } from '../utils/helper'
 import { helper } from './../utils'
 
 // common
@@ -25,7 +26,8 @@ export const LOGIN = {
 }
 // user
 export const USER = {
-    USER_GET: (userId) => helper.combinePath(user, userId)
+    USER_GET: (userId) => helper.combinePath(user, userId),
+    USER_POST: helper.combinePath(user)
 }
 // friend
 export const FRIEND = {
@@ -39,7 +41,9 @@ export const FRIEND = {
 }
 // room
 export const ROOM = {
-    ROOM_GET: (userId, roomId) => helper.combinePath(user, userId, room, roomId, info),
+    ROOM_GET: (userId, friendId) => combinePath(user, userId, friend, friendId, room),
+    ROOM_GET_INFO: (userId, roomId) => helper.combinePath(user, userId, room, roomId, info),
     ROOM_LIST_GET: (userId) => helper.combinePath(user, userId, rooms),
+    ROOM_LIST_GET_INFO: (userId) => helper.combinePath(user, userId, rooms, info),
     ROOM_GET_MEMBER: (userId, roomId) => helper.combinePath(user, userId, room, roomId, member)
 }

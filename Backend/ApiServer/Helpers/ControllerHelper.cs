@@ -4,6 +4,7 @@ using ApiServer.Repositories;
 using ApiServer.Services;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiServer.Helpers
@@ -19,6 +20,14 @@ namespace ApiServer.Helpers
             {
                 await RefreshToken(httpContext, user);
             }
+            return user != null;
+        }
+
+        public static async Task<bool> CheckAuthentication(MarshmallowChatContext _context, Dictionary<string, string> cookies)
+        {
+            int id = Convert.ToInt32(cookies[CookieConstants.id]);
+            string secret = cookies[CookieConstants.secret];
+            User user = await UserRepository.SelectAsync(_context, id, secret);
             return user != null;
         }
 

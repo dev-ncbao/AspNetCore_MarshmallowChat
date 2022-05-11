@@ -13,5 +13,6 @@ namespace ApiServer.CustomModels
         public string Name { get; set; }
         public string Avatar { get; set; }
         public MessageModel LastMessage { get; set; }
+        public List<UserModel> Members { get; set; }
     }
 }

@@ -2,7 +2,7 @@ import { useReducer } from 'react'
 import Context from './Context'
 import reducer, { initState } from './reducer'
 
-function Provider({children}){
+function Provider({ children }) {
     const [state, dispatch] = useReducer(reducer, initState)
     return (
         <Context.Provider value={[state, dispatch]}>
@@ -11,4 +11,4 @@ function Provider({children}){
     )
 }
 
-export default Provider
+export { Provider }

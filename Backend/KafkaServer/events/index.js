@@ -1,5 +1,5 @@
-const registerChatHandler = require("./chatHandler")
-const registerRoomHandler = require('./roomHandler')
+const registerChatHandler = require("./chat")
+const registerRoomHandler = require('./room')
 
 module.exports = {
     registerChatHandler,

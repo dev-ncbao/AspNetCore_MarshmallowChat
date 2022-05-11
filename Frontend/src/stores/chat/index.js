@@ -1,3 +1,3 @@
-export { useStore as useChatStore } from './hook'
-export { default as ChatProvider } from './Provider'
-export * as ChatActions from './actions'
+export { useStore } from './hook'
+export { Provider } from './Provider'
+export * as actions from './actions'
